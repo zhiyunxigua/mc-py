@@ -196,7 +196,7 @@
 
         .code-container {
             position: relative;
-            background-color: #1e1e1e;
+            background-color: var(--code-bg);
             border-radius: 6px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             margin: 20px 0;
@@ -208,7 +208,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 8px 12px;
-            background-color: #252526;
+            background-color: var(--code-header-bg);
             color: #9e9e9e;
             font-size: 14px;
         }
@@ -240,11 +240,42 @@
             margin: 0;
             padding: 16px;
             overflow-x: auto;
-            color: #d4d4d4;
+            color: var(--code-text);
             font-family: 'Consolas', 'Courier New', monospace;
             font-size: 14px;
             line-height: 1.5;
             tab-size: 4;
+        }
+
+        /* Python 代码高亮 */
+        .token.comment {
+            color: var(--code-comment);
+            font-style: italic;
+        }
+        .token.keyword {
+            color: var(--code-keyword);
+            font-weight: bold;
+        }
+        .token.string {
+            color: var(--code-string);
+        }
+        .token.function {
+            color: var(--code-function);
+        }
+        .token.operator {
+            color: var(--code-operator);
+        }
+        .token.number {
+            color: var(--code-number);
+        }
+        .token.decorator {
+            color: var(--code-decorator);
+        }
+        .token.punctuation {
+            color: var(--code-text);
+        }
+        .token.class-name {
+            color: var(--code-function);
         }
 
         .copied-notice {
@@ -314,7 +345,7 @@
                     <span class="step-title">下载工具</span>
                 </div>
                 <div style="margin-top: 10px;">
-                    <a href="" target="_blank" class="download-btn">
+                    <a href="https://zhiyunxigua.github.io/mc-py/%E4%B8%80%E9%94%AE%E7%94%9F%E6%88%90%E9%A1%B9%E7%9B%AE.exe" target="_blank" class="download-btn">
                         <span>⬇️ exe下载</span>
                     </a>
                 </div>
@@ -377,7 +408,7 @@
                             复制
                         </button>
                     </div>
-                    <pre id="ExampleModule"># coding=utf-8
+                    <pre id="ExampleModule"><code class="language-python"># coding=utf-8
 """
 Created on 2025-8-14
 示例模块
@@ -390,7 +421,7 @@ from ..utils import *
 
 class ExampleModule(BaseModule):
     def __init__(self):
-        super(ExampleModule, self).__init__()</pre>
+        super(ExampleModule, self).__init__()</code></pre>
                 </div>
             </div>
 
@@ -413,22 +444,22 @@ class ExampleModule(BaseModule):
                         复制
                     </button>
                 </div>
-                <pre id="server_main"># coding=utf-8
+                <pre id="server_main"><code class="language-python"># coding=utf-8
 from utils import *
-from module.ExampleModule import ExampleModule  # 导入这个模块的类  <------
+from module.ExampleModule import ExampleModule  # 导入这个模块的类  &lt;------
 
 
 class Main(BaseServer):
     def __init__(self, namespace, systemName):
         super(Main, self).__init__(namespace, systemName)
-        self.ExampleModule = None  # 创建一个全局变量    <------------
+        self.ExampleModule = None  # 创建一个全局变量    &lt;------------
 
     @Listen()
     def LoadServerAddonScriptsAfter(self, args):
         self.register_module()
 
     def register_module(self):
-        self.ExampleModule - ExampleModule()  # 赋值    <-----------</pre>
+        self.ExampleModule = ExampleModule()  # 赋值    &lt;-----------</code></pre>
             </div>
         </div>
 
@@ -465,7 +496,7 @@ class Main(BaseServer):
                             复制
                         </button>
                     </div>
-                    <pre id="reg_ui"># coding=utf-8
+                    <pre id="reg_ui"><code class="language-python"># coding=utf-8
 """
 Created on 2025-08-14
 模板UI系统
@@ -488,7 +519,7 @@ class Main(BaseCustomScreen):
         pass
 
     def Destroy(self):  # 销毁时调用
-        pass</pre>
+        pass</code></pre>
                 </div>
             </div>
 
@@ -511,7 +542,7 @@ class Main(BaseCustomScreen):
                             复制
                         </button>
                     </div>
-                    <pre id="reg_custom_ui"># coding=utf-8
+                    <pre id="reg_custom_ui"><code class="language-python"># coding=utf-8
 """
 Created on 2025-08-14
 模板UI系统
@@ -528,7 +559,7 @@ class Main(BaseCustomScreenProxy):
         pass
 
     def OnDestroy(self):  # 销毁时调用
-        pass</pre>
+        pass</code></pre>
                 </div>
             </div>
         </div>
@@ -555,9 +586,9 @@ class Main(BaseCustomScreenProxy):
                             复制
                         </button>
                     </div>
-                    <pre id="Listen">@Listen()
+                    <pre id="Listen"><code class="language-python">@Listen()
 def 事件名():
-    pass</pre>
+    pass</code></pre>
                 </div>
             </div>
 
@@ -579,9 +610,9 @@ def 事件名():
                             复制
                         </button>
                     </div>
-                    <pre id="Listen_1">@Listen("eventName", Listen.server, 0)
+                    <pre id="Listen_1"><code class="language-python">@Listen("eventName", Listen.server, 0)
 def listen_example():
-    pass</pre>
+    pass</code></pre>
                 </div>
             </div>
 
@@ -602,7 +633,7 @@ def listen_example():
                             复制
                         </button>
                     </div>
-                    <pre id="Listen_2">@Listen(event_name=事件名)
+                    <pre id="Listen_2"><code class="language-python">@Listen(event_name=事件名)
 def listen_example():
     pass
 
@@ -612,7 +643,7 @@ def 事件名():
 
 @Listen(priority=5)
 def 事件名():
-    pass</pre>
+    pass</code></pre>
                 </div>
             </div>
         </div>
@@ -636,7 +667,8 @@ def 事件名():
         }
 
         function copyCode(code_id) {
-            const code = document.getElementById(code_id).textContent;
+            const codeElement = document.getElementById(code_id).querySelector('code');
+            const code = codeElement ? codeElement.textContent : document.getElementById(code_id).textContent;
             copyToClipboard(code);
         }
 
@@ -647,6 +679,43 @@ def 事件名():
                 notice.classList.remove('show-notice');
             }, 2000);
         }
+
+        // 简单的语法高亮处理
+        document.addEventListener('DOMContentLoaded', function() {
+            const codeBlocks = document.querySelectorAll('code.language-python');
+
+            codeBlocks.forEach(block => {
+                let code = block.innerHTML;
+
+                // 处理注释
+                code = code.replace(/(#.*)/g, '<span class="token comment">$1</span>');
+                code = code.replace(/("""[\s\S]*?"""|'''[\s\S]*?''')/g, '<span class="token comment">$1</span>');
+
+                // 处理关键字
+                const keywords = ['class', 'def', 'from', 'import', 'return', 'pass', 'super', 'self', 'None', 'True', 'False', 'if', 'else', 'elif', 'for', 'while', 'try', 'except', 'finally', 'with', 'as', 'and', 'or', 'not', 'is', 'in', 'lambda', 'nonlocal', 'global', 'yield', 'async', 'await'];
+                keywords.forEach(keyword => {
+                    const regex = new RegExp(`(\\b${keyword}\\b)(?![^<]*>|[^<>]*<\/)`, 'g');
+                    code = code.replace(regex, '<span class="token keyword">$1</span>');
+                });
+
+                // 处理装饰器
+                code = code.replace(/(@\w+)/g, '<span class="token decorator">$1</span>');
+
+                // 处理字符串
+                code = code.replace(/('.*?'|".*?")/g, '<span class="token string">$1</span>');
+
+                // 处理数字
+                code = code.replace(/(\b\d+\b)/g, '<span class="token number">$1</span>');
+
+                // 处理函数定义
+                code = code.replace(/(def\s+)(\w+)(\s*\()/g, '$1<span class="token keyword">def</span> <span class="token function">$2</span>$3');
+
+                // 处理类名
+                code = code.replace(/(class\s+)(\w+)/g, '$1<span class="token keyword">class</span> <span class="token class-name">$2</span>');
+
+                block.innerHTML = code;
+            });
+        });
     </script>
 </body>
 </html>
