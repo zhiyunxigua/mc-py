@@ -17,12 +17,12 @@
             --code-header-bg: #252526;
             --code-text: #d4d4d4;
             --code-comment: #6A9955;
-            --code-keyword: #569CD6;
-            --code-string: #CE9178;
+            --code-keyword: #CE9178;
+            --code-string: #4F7956;
             --code-function: #DCDCAA;
             --code-operator: #D4D4D4;
             --code-number: #B5CEA8;
-            --code-decorator: #C586C0;
+            --code-decorator: #B3AE60;
         }
 
         * {
@@ -680,42 +680,119 @@ def 事件名():
             }, 2000);
         }
 
-        // 简单的语法高亮处理
-        document.addEventListener('DOMContentLoaded', function() {
-            const codeBlocks = document.querySelectorAll('code.language-python');
+document.addEventListener('DOMContentLoaded', function() {
+    const codeBlocks = document.querySelectorAll('code.language-python');
 
-            codeBlocks.forEach(block => {
-                let code = block.innerHTML;
+    codeBlocks.forEach(block => {
+        // 保存原始文本
+        const originalText = block.textContent;
+        let highlightedText = '';
+        let currentPos = 0;
 
-                // 处理注释
-                code = code.replace(/(#.*)/g, '<span class="token comment">$1</span>');
-                code = code.replace(/("""[\s\S]*?"""|'''[\s\S]*?''')/g, '<span class="token comment">$1</span>');
+        // 关键字列表
+        const keywords = ['class', 'def', 'from', 'import', 'return', 'pass', 'super',
+                        'self', 'None', 'True', 'False', 'if', 'else', 'elif', 'for',
+                        'while', 'try', 'except', 'finally', 'with', 'as', 'and',
+                        'or', 'not', 'is', 'in ', 'lambda', 'nonlocal', 'global', 'yield',
+                        'async', 'await'];
 
-                // 处理关键字
-                const keywords = ['class', 'def', 'from', 'import', 'return', 'pass', 'super', 'self', 'None', 'True', 'False', 'if', 'else', 'elif', 'for', 'while', 'try', 'except', 'finally', 'with', 'as', 'and', 'or', 'not', 'is', 'in', 'lambda', 'nonlocal', 'global', 'yield', 'async', 'await'];
-                keywords.forEach(keyword => {
-                    const regex = new RegExp(`(\\b${keyword}\\b)(?![^<]*>|[^<>]*<\/)`, 'g');
-                    code = code.replace(regex, '<span class="token keyword">$1</span>');
-                });
+        // 处理每一行
+        const lines = originalText.split('\n');
 
-                // 处理装饰器
-                code = code.replace(/(@\w+)/g, '<span class="token decorator">$1</span>');
+        lines.forEach((line, lineIndex) => {
+            let lineContent = '';
+            let i = 0;
+
+            while (i < line.length) {
+                // 处理多行注释
+                if (line.substr(i, 3) === '"""') {
+                    const endPos = line.indexOf('"""', i + 3);
+                    if (endPos === -1) {
+                        lineContent += '<span class="token comment">' + line.substring(i) + '</span>';
+                        i = line.length;
+                    } else {
+                        lineContent += '<span class="token comment">' + line.substring(i, endPos + 3) + '</span>';
+                        i = endPos + 3;
+                    }
+                    continue;
+                }
+
+                // 处理单行注释
+                if (line[i] === '#') {
+                    lineContent += '<span class="token comment">' + line.substring(i) + '</span>';
+                    break;
+                }
 
                 // 处理字符串
-                code = code.replace(/('.*?'|".*?")/g, '<span class="token string">$1</span>');
+                if (line[i] === '"' || line[i] === "'") {
+                    const quoteChar = line[i];
+                    let endPos = i + 1;
+
+                    while (endPos < line.length) {
+                        if (line[endPos] === quoteChar && line[endPos - 1] !== '\\') {
+                            break;
+                        }
+                        endPos++;
+                    }
+
+                    if (endPos >= line.length) endPos = line.length - 1;
+
+                    lineContent += '<span class="token string">' + line.substring(i, endPos + 1) + '</span>';
+                    i = endPos + 1;
+                    continue;
+                }
+
+                // 处理装饰器
+                if (line[i] === '@') {
+                    const endPos = line.indexOf(' ', i);
+                    const decoratorEnd = endPos === -1 ? line.length : endPos;
+
+                    lineContent += '<span class="token decorator">' + line.substring(i, decoratorEnd) + '</span>';
+                    i = decoratorEnd;
+                    continue;
+                }
+
+                // 处理关键字
+                let keywordFound = false;
+                for (const keyword of keywords) {
+                    if (line.substr(i, keyword.length) === keyword &&
+                        (i + keyword.length >= line.length || !/\w/.test(line[i + keyword.length]))) {
+                        lineContent += '<span class="token keyword">' + keyword + '</span>';
+                        i += keyword.length;
+                        keywordFound = true;
+                        break;
+                    }
+                }
+
+                if (keywordFound) continue;
 
                 // 处理数字
-                code = code.replace(/(\b\d+\b)/g, '<span class="token number">$1</span>');
+                if (/\d/.test(line[i])) {
+                    let endPos = i + 1;
+                    while (endPos < line.length && /\d/.test(line[endPos])) {
+                        endPos++;
+                    }
 
-                // 处理函数定义
-                code = code.replace(/(def\s+)(\w+)(\s*\()/g, '$1<span class="token keyword">def</span> <span class="token function">$2</span>$3');
+                    lineContent += '<span class="token number">' + line.substring(i, endPos) + '</span>';
+                    i = endPos;
+                    continue;
+                }
 
-                // 处理类名
-                code = code.replace(/(class\s+)(\w+)/g, '$1<span class="token keyword">class</span> <span class="token class-name">$2</span>');
+                // 默认情况，直接添加字符
+                lineContent += line[i];
+                i++;
+            }
 
-                block.innerHTML = code;
-            });
+            highlightedText += lineContent;
+            if (lineIndex < lines.length - 1) {
+                highlightedText += '\n'; // 保留换行符
+            }
         });
+
+        // 设置处理后的HTML
+        block.innerHTML = highlightedText;
+    });
+});
     </script>
 </body>
 </html>
