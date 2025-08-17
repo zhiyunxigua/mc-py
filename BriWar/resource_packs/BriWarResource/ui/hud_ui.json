@@ -1,0 +1,1069 @@
+{
+    "client_info": {
+        "type": "custom",
+        "renderer": "gradient_renderer",
+        "anchor_from": "bottom_left",
+        "anchor_to": "bottom_left",
+        "offset": [
+            6.0,
+            0.0
+        ],
+        "size": [
+            "100%cm+4px",
+            "100%c+0px"
+        ],
+        "color1": [
+            0,
+            0,
+            0,
+            0.6
+        ],
+        "color2": [
+            0,
+            0,
+            0,
+            0
+        ],
+        "gradient_direction": "horizontal",
+        "controls": [
+            {
+                "player_position": {
+                    "type": "image",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "size": [
+                        "100%c + 6px",
+                        10
+                    ],
+                    "bindings": [
+                        {
+                            "binding_type": "global",
+                            "binding_name_override": "#visible",
+                            "binding_condition": "always",
+                            "binding_name": "#player_position_visible"
+                        }
+                    ],
+                    "controls": [
+                        {
+                            "background": {
+                                "type": "image",
+                                "anchor_from": "top_left",
+                                "anchor_to": "top_left",
+                                "size": [
+                                    1.0,
+                                    10
+                                ],
+                                "layer": 1,
+                                "color": [
+                                    0.0,
+                                    0.6666666666666666,
+                                    1.0
+                                ],
+                                "texture": "textures/ui/control_white"
+                            }
+                        },
+                        {
+                            "player_position_text": {
+                                "type": "label",
+                                "anchor_from": "left_middle",
+                                "anchor_to": "left_middle",
+                                "offset": [
+                                    1.0,
+                                    0.0
+                                ],
+                                "layer": 1,
+                                "color": "$chat_text_color",
+                                "enable_profanity_filter": false,
+                                "shadow": true,
+                                "text": "#text",
+                                "bindings": [
+                                    {
+                                        "binding_type": "global",
+                                        "binding_name_override": "#text",
+                                        "binding_condition": "always_when_visible",
+                                        "binding_name": "#player_position_text"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "input_mode_panel": {
+                    "type": "stack_panel",
+                    "anchor_from": "bottom_left",
+                    "anchor_to": "bottom_left",
+                    "size": [
+                        "100%c+0px",
+                        10.0
+                    ],
+                    "layer": 1,
+                    "orientation": "horizontal",
+                    "controls": [
+                        {
+                            "background": {
+                                "type": "image",
+                                "anchor_from": "top_left",
+                                "anchor_to": "top_left",
+                                "size": [
+                                    1.0,
+                                    10
+                                ],
+                                "layer": 1,
+                                "color": [
+                                    0.0,
+                                    0.6666666666666666,
+                                    1.0
+                                ],
+                                "texture": "textures/ui/control_white"
+                            }
+                        },
+                        {
+                            "label": {
+                                "type": "label",
+                                "font_type": "smooth",
+                                "text": "操作方式: "
+                            }
+                        },
+                        {
+                            "keyboard_and_mouse@hud_ui.input_mode_image": {
+                                "$glyph_color_texture": "textures/ui/keyboard_and_mouse_glyph_color",
+                                "$glyph_texture": "textures/ui/keyboard_and_mouse_glyph",
+                                "bindings": [
+                                    {
+                                        "binding_condition": "always",
+                                        "binding_name": "#input_mode.keyboard_and_mouse",
+                                        "binding_name_override": "#visible"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "controller@hud_ui.input_mode_image": {
+                                "$glyph_color_texture": "textures/ui/controller_glyph_color",
+                                "$glyph_texture": "textures/ui/controller_glyph",
+                                "bindings": [
+                                    {
+                                        "binding_condition": "always",
+                                        "binding_name": "#input_mode.controller",
+                                        "binding_name_override": "#visible"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "touch@hud_ui.input_mode_image": {
+                                "$glyph_color_texture": "textures/ui/touch_glyph_color",
+                                "$glyph_texture": "textures/ui/touch_glyph",
+                                "bindings": [
+                                    {
+                                        "binding_condition": "always",
+                                        "binding_name": "#input_mode.touch",
+                                        "binding_name_override": "#visible"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "ping": {
+                                "type": "label",
+                                "font_type": "default",
+                                "shadow": true,
+                                "text": " 延迟:",
+                                "text_alignment": "center"
+                            }
+                        },
+                        {
+                            "ping_value": {
+                                "type": "label",
+                                "layer": 1,
+                                "font_type": "smooth",
+                                "shadow": true,
+                                "text": "#ping_value",
+                                "bindings": [
+                                    {
+                                        "binding_condition": "always",
+                                        "binding_name": "#ping_value"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "danmaku": {
+        "type": "panel",
+        "anchor_from": "top_middle",
+        "anchor_to": "top_middle",
+        "offset": [
+            0.0,
+            10.0
+        ],
+        "size": [
+            "default",
+            45.0
+        ],
+        "layer": 1000
+    },
+    "danmaku_text": {
+        "type": "image",
+        "anchor_from": "top_left",
+        "anchor_to": "top_left",
+        "size": [
+            "100%c+4px",
+            "100%c+4px"
+        ],
+        "layer": 999,
+        "alpha": 0.7,
+        "texture": "",
+        "controls": [
+            {
+                "text": {
+                    "type": "label",
+                    "layer": 1000,
+                    "alpha": 0.7,
+                    "font_type": "default",
+                    "shadow": true,
+                    "text": "Hello World!",
+                    "text_alignment": "center"
+                }
+            }
+        ]
+    },
+    "exp_bar@common.slider": {
+        "$background_default_control": "hud_ui.exp_bar_background",
+        "$background_hover_control": "hud_ui.exp_bar_background",
+        "$progress_default_clip_direction": "left",
+        "$progress_default_control": "hud_ui.exp_bar_background",
+        "$progress_hover_clip_direction": "left",
+        "$progress_hover_control": "hud_ui.exp_bar_background",
+        "$slider_box_hover_layout": "hud_ui.exp_bar_box",
+        "$slider_box_indent_layout": "common.slider_button_indent_layout",
+        "$slider_box_layout": "hud_ui.exp_bar_box",
+        "$slider_box_locked_layout": "common.slider_button_locked_layout",
+        "$slider_box_size": [
+            4,
+            4
+        ],
+        "$slider_direction": "horizontal",
+        "$slider_name": "#hud_proxys.OnDemoSliderChange",
+        "$slider_step_factory_control_ids": {
+            "slider_step": "@common.slider_step",
+            "slider_step_hover": "@common.slider_step_hover",
+            "slider_step_progress": "@common.slider_step_progress",
+            "slider_step_progress_hover": "@common.slider_step_progress_hover"
+        },
+        "$slider_steps_binding_name": "#hud_proxys.ReturnSliderStep",
+        "$slider_tts_text_value": "#netease_tts_text_value",
+        "$slider_value_binding_name": "#hud_proxys.ReturnSliderValue",
+        "anchor_from": "bottom_middle",
+        "anchor_to": "bottom_middle",
+        "controls": [
+            {
+                "slider_box@common.slider_box": {
+                    "$slider_box_layout": "$slider_box_layout",
+                    "$slider_box_size": "$slider_box_size",
+                    "$slider_track_button": "$slider_name"
+                }
+            },
+            {
+                "slider_bar_default@common.slider_bar_default": {
+                    "$background_control": "$background_default_control",
+                    "$is_holographic": true,
+                    "$progress_clip_direction": "$progress_default_clip_direction",
+                    "$progress_control": "$progress_default_control",
+                    "texture": ""
+                }
+            },
+            {
+                "slider_bar_hover@common.slider_bar_hover": {
+                    "$background_control": "$background_hover_control",
+                    "$is_holographic": true,
+                    "$progress_clip_direction": "$progress_hover_clip_direction",
+                    "$progress_control": "$progress_hover_control",
+                    "texture": "",
+                    "visible": false
+                }
+            },
+            {
+                "input_panel": {
+                    "type": "input_panel",
+                    "layer": 5,
+                    "button_mappings": [
+                        {
+                            "to_button_id": "#netease_to_button_id",
+                            "from_button_id": "button.menu_select",
+                            "mapping_type": "pressed"
+                        }
+                    ],
+                    "is_swallow": true
+                }
+            }
+        ],
+        "offset": [
+            0,
+            -26
+        ],
+        "size": [
+            180,
+            5
+        ]
+    },
+    "exp_bar_background": {
+        "type": "image",
+        "layer": 1,
+        "texture": ""
+    },
+    "exp_bar_box": {
+        "type": "image",
+        "size": [
+            5.0,
+            5.0
+        ],
+        "layer": 1,
+        "color": [
+            0.3333333333333333,
+            1.0,
+            0.0
+        ],
+        "texture": "textures/ui/framed_point",
+        "bindings": [
+            {
+                "binding_name_override": "#visible",
+                "binding_condition": "always",
+                "binding_name": "#exp_bar_box.visible"
+            }
+        ]
+    },
+    "game_info": {
+        "type": "label",
+        "anchor_from": "bottom_right",
+        "anchor_to": "bottom_right",
+        "font_size": "small",
+        "font_type": "default",
+        "text": "#game_info.text",
+        "bindings": [
+            {
+                "binding_condition": "always",
+                "binding_name": "#game_info.text"
+            }
+        ]
+    },
+    "hud_ui_main_screen": {
+        "type": "screen",
+        "controls": [
+            {
+                "top": {
+                    "type": "stack_panel",
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        0,
+                        20
+                    ],
+                    "size": [
+                        "100.0%c+2.0px",
+                        "100.0%cm+0.0px"
+                    ],
+                    "layer": 1,
+                    "orientation": "horizontal",
+                    "controls": []
+                }
+            },
+            {
+                "bottom": {
+                    "type": "stack_panel",
+                    "anchor_from": "bottom_middle",
+                    "anchor_to": "bottom_middle",
+                    "offset": [
+                        0,
+                        -50
+                    ],
+                    "size": [
+                        "100.0%c+2.0px",
+                        "100.0%cm+0.0px"
+                    ],
+                    "layer": 1,
+                    "orientation": "horizontal",
+                    "controls": []
+                }
+            }
+        ]
+    },
+    "input_mode_image": {
+        "type": "image",
+        "$glyph_color_texture": "",
+        "$glyph_texture": "",
+        "anchor_from": "right_middle",
+        "anchor_to": "left_middle",
+        "size": [
+            20.0,
+            10.0
+        ],
+        "layer": 1,
+        "texture": "$glyph_texture",
+        "controls": [
+            {
+                "image": {
+                    "type": "image",
+                    "layer": 1,
+                    "texture": "$glyph_color_texture"
+                }
+            }
+        ]
+    },
+    "main@common.base_screen": {
+        "$screen_content": "hud_ui.hud_ui_main_screen"
+    },
+    "namespace": "hud_ui",
+    "original_button": {
+        "type": "panel",
+        "$texture|default": "",
+        "size": [
+            21,
+            21
+        ],
+        "layer": 1,
+        "controls": [
+            {
+                "button@common.button": {
+                    "type": "button",
+                    "$control_alpha": 1,
+                    "$default_texture": "$texture",
+                    "$hover_texture": "$texture",
+                    "$is_new_nine_slice": false,
+                    "$label_color": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "$label_font_scale_factor": 1,
+                    "$label_font_size": "large",
+                    "$label_layer": 3,
+                    "$label_offset": [
+                        0,
+                        0
+                    ],
+                    "$label_text": "",
+                    "$nine_slice_buttom": 0,
+                    "$nine_slice_left": 0,
+                    "$nine_slice_right": 0,
+                    "$nine_slice_top": 0,
+                    "$nineslice_size": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "$pressed_button_name": "%hud_ui.original_button_click",
+                    "$pressed_texture": "$texture",
+                    "$texture_layer": 2,
+                    "size": [
+                        20,
+                        20
+                    ],
+                    "layer": 2,
+                    "alpha": 0.6,
+                    "propagate_alpha": true,
+                    "default_control": "default",
+                    "hover_control": "hover",
+                    "is_handle_button_move_event": true,
+                    "pressed_control": "pressed",
+                    "bindings": [
+                        {
+                            "binding_type": "global",
+                            "binding_name_override": "#visible",
+                            "binding_name": "#hotbar_elipses_right_visible"
+                        }
+                    ],
+                    "controls": [
+                        {
+                            "default@netease_editor_template_namespace.default": {}
+                        },
+                        {
+                            "hover@netease_editor_template_namespace.hover": {}
+                        },
+                        {
+                            "pressed@netease_editor_template_namespace.pressed": {}
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "pers_second": {
+        "type": "stack_panel",
+        "anchor_from": "bottom_middle",
+        "anchor_to": "bottom_left",
+        "offset": [
+            92.0,
+            0.0
+        ],
+        "size": [
+            "100%c+0px",
+            22.0
+        ],
+        "orientation": "horizontal",
+        "controls": [
+            {
+                "pers_second_padding": {
+                    "type": "panel",
+                    "size": [
+                        20.0,
+                        22.0
+                    ],
+                    "bindings": [
+                        {
+                            "binding_name_override": "#visible",
+                            "binding_name": "#hotbar_elipses_right_visible"
+                        }
+                    ]
+                }
+            },
+            {
+                "pers_second_text": {
+                    "type": "panel",
+                    "size": [
+                        0,
+                        22
+                    ],
+                    "controls": [
+                        {
+                            "FPS": {
+                                "type": "label",
+                                "anchor_from": "top_left",
+                                "anchor_to": "top_left",
+                                "font_type": "smooth",
+                                "shadow": true,
+                                "text": "#FPS_value",
+                                "bindings": [
+                                    {
+                                        "binding_condition": "always",
+                                        "binding_name": "#FPS_value"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "CPS": {
+                                "type": "label",
+                                "anchor_from": "top_left",
+                                "anchor_to": "top_left",
+                                "offset": [
+                                    0.0,
+                                    10.0
+                                ],
+                                "font_type": "smooth",
+                                "shadow": true,
+                                "text": "#CPS_value",
+                                "bindings": [
+                                    {
+                                        "binding_condition": "always",
+                                        "binding_name": "#CPS_value"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "player_info": {
+        "type": "panel",
+        "anchor_from": "top_left",
+        "anchor_to": "top_left",
+        "offset": [
+            5.0,
+            5.0
+        ],
+        "size": [
+            134.0,
+            32.0
+        ],
+        "layer": 1,
+        "bindings": [
+            {
+                "binding_name_override": "#visible",
+                "binding_condition": "always",
+                "binding_name": "#player_info.visible"
+            }
+        ],
+        "controls": [
+            {
+                "frame": {
+                    "type": "image",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "size": [
+                        32.0,
+                        32.0
+                    ],
+                    "layer": 1,
+                    "texture": "",
+                    "controls": [
+                        {
+                            "head": {
+                                "type": "image",
+                                "size": [
+                                    22.0,
+                                    22.0
+                                ],
+                                "layer": 1,
+                                "texture": "textures/ui/entityIcon/allay"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "lvl_and_name": {
+                    "type": "panel",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        34.0,
+                        0.0
+                    ],
+                    "size": [
+                        100,
+                        10.0
+                    ],
+                    "layer": 1,
+                    "controls": [
+                        {
+                            "lvl": {
+                                "type": "image",
+                                "anchor_from": "left_middle",
+                                "anchor_to": "left_middle",
+                                "size": [
+                                    10.0,
+                                    10.0
+                                ],
+                                "layer": 1,
+                                "texture": "textures/ui/pet_visible_bg",
+                                "controls": [
+                                    {
+                                        "text": {
+                                            "type": "label",
+                                            "size": [
+                                                10.0,
+                                                10.0
+                                            ],
+                                            "layer": 1,
+                                            "font_type": "default",
+                                            "text": "1",
+                                            "text_alignment": "center"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "type": "label",
+                                "anchor_from": "left_middle",
+                                "anchor_to": "left_middle",
+                                "offset": [
+                                    14.0,
+                                    0.0
+                                ],
+                                "font_type": "smooth",
+                                "text": "玩家昵称"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "lvl_bar": {
+                    "type": "panel",
+                    "$clip_direction": "left",
+                    "$clip_ratio": 0.0,
+                    "$is_new_nine_slice": false,
+                    "$nine_slice_buttom": 0,
+                    "$nine_slice_left": 0,
+                    "$nine_slice_right": 0,
+                    "$nine_slice_top": 0,
+                    "$nineslice_size": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "$progress_bar_empty_texture": "textures/ui/empty_progress_bar",
+                    "$progress_bar_filled_texture": "textures/ui/filled_progress_bar",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        34.0,
+                        15.0
+                    ],
+                    "size": [
+                        100,
+                        3.0
+                    ],
+                    "layer": 8,
+                    "controls": [
+                        {
+                            "empty_progress_bar@netease_editor_template_namespace.empty_progress_bar": {}
+                        },
+                        {
+                            "filled_progress_bar@netease_editor_template_namespace.filled_progress_bar": {}
+                        }
+                    ]
+                }
+            },
+            {
+                "property": {
+                    "type": "panel",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        34.0,
+                        22.0
+                    ],
+                    "size": [
+                        100,
+                        10.0
+                    ],
+                    "layer": 1,
+                    "controls": [
+                        {
+                            "diamond": {
+                                "type": "image",
+                                "anchor_from": "left_middle",
+                                "anchor_to": "left_middle",
+                                "size": [
+                                    50.0,
+                                    10.0
+                                ],
+                                "layer": 1,
+                                "nineslice_size": [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ],
+                                "texture": "textures/ui/netease_shop/panel03",
+                                "controls": [
+                                    {
+                                        "button@common.button": {
+                                            "type": "button",
+                                            "$control_alpha": 1.0,
+                                            "$default_texture": "textures/ui/netease_shop/btn01",
+                                            "$hover_texture": "textures/ui/netease_shop/btn01_hover",
+                                            "$is_new_nine_slice": false,
+                                            "$label_color": [
+                                                1,
+                                                1,
+                                                1
+                                            ],
+                                            "$label_font_scale_factor": 1.0,
+                                            "$label_font_size": "large",
+                                            "$label_layer": 3,
+                                            "$label_offset": [
+                                                0,
+                                                0
+                                            ],
+                                            "$label_text": "Button",
+                                            "$nine_slice_buttom": 0,
+                                            "$nine_slice_left": 0,
+                                            "$nine_slice_right": 0,
+                                            "$nine_slice_top": 0,
+                                            "$nineslice_size": [
+                                                0,
+                                                0,
+                                                0,
+                                                0
+                                            ],
+                                            "$pressed_button_name": "%netease_editor_template_namespace.click",
+                                            "$pressed_texture": "textures/ui/netease_shop/btn01_click",
+                                            "$texture_layer": 2,
+                                            "anchor_from": "right_middle",
+                                            "anchor_to": "right_middle",
+                                            "size": [
+                                                10.0,
+                                                10.0
+                                            ],
+                                            "layer": 2,
+                                            "button_mappings": [],
+                                            "default_control": "default",
+                                            "hover_control": "hover",
+                                            "is_handle_button_move_event": true,
+                                            "pressed_control": "pressed",
+                                            "bindings": [
+                                                {
+                                                    "binding_type": "collection_details",
+                                                    "binding_collection_name": "",
+                                                    "binding_condition": "always_when_visible"
+                                                }
+                                            ],
+                                            "controls": [
+                                                {
+                                                    "default@netease_editor_template_namespace.default": {}
+                                                },
+                                                {
+                                                    "hover@netease_editor_template_namespace.hover": {}
+                                                },
+                                                {
+                                                    "pressed@netease_editor_template_namespace.pressed": {}
+                                                },
+                                                {
+                                                    "image": {
+                                                        "type": "image",
+                                                        "size": [
+                                                            6.0,
+                                                            6.0
+                                                        ],
+                                                        "layer": 3,
+                                                        "texture": "textures/ui/netease_shop/icon02"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "image": {
+                                            "type": "image",
+                                            "anchor_from": "left_middle",
+                                            "anchor_to": "left_middle",
+                                            "size": [
+                                                10.0,
+                                                10.0
+                                            ],
+                                            "layer": 1,
+                                            "texture": "textures/ui/netease_shop/icon_prize01"
+                                        }
+                                    },
+                                    {
+                                        "num": {
+                                            "type": "label",
+                                            "anchor_from": "left_middle",
+                                            "anchor_to": "left_middle",
+                                            "offset": [
+                                                10.0,
+                                                0.0
+                                            ],
+                                            "size": [
+                                                30.0,
+                                                10.0
+                                            ],
+                                            "font_type": "default",
+                                            "text": "100000000",
+                                            "text_alignment": "center"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "root_panel_watermelon": {
+        "type": "panel",
+        "controls": [
+            {
+                "player_position_bar@hud_ui.exp_bar": {}
+            },
+            {
+                "scoreboard@hud_ui.scoreboard_panel": {}
+            },
+            {
+                "client_info@hud_ui.client_info": {}
+            },
+            {
+                "game_info@hud_ui.game_info": {}
+            },
+            {
+                "player_info@hud_ui.player_info": {}
+            },
+            {
+                "pers_second@hud_ui.pers_second": {}
+            },
+            {
+                "danmaku@hud_ui.danmaku": {}
+            }
+        ]
+    },
+    "scoreboard_background": {
+        "type": "custom",
+        "renderer": "gradient_renderer",
+        "size": [
+            "100%sm+0px",
+            "100%sm+10px"
+        ],
+        "color1": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "color2": [
+            0.0,
+            0.0,
+            0.0,
+            0.8
+        ],
+        "gradient_direction": "horizontal"
+    },
+    "scoreboard_panel": {
+        "type": "panel",
+        "anchor_from": "right_middle",
+        "anchor_to": "right_middle",
+        "offset": [
+            -5.0,
+            0.0
+        ],
+        "size": [
+            "100%cm+0px",
+            "100%cm+0px"
+        ],
+        "bindings": [
+            {
+                "binding_type": "global",
+                "binding_name_override": "#visible",
+                "binding_condition": "always",
+                "binding_name": "#scoreboard_panel.visible"
+            }
+        ],
+        "controls": [
+            {
+                "title": {
+                    "type": "label",
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "font_type": "default",
+                    "text": "#scoreboard_panel.title",
+                    "text_alignment": "center",
+                    "property_bag": {
+                        "#scoreboard_panel.title": "title"
+                    },
+                    "bindings": [
+                        {
+                            "binding_type": "global",
+                            "binding_condition": "visible",
+                            "binding_name": "#scoreboard_panel.title"
+                        }
+                    ]
+                }
+            },
+            {
+                "text_panel": {
+                    "type": "stack_grid",
+                    "anchor_from": "bottom_left",
+                    "anchor_to": "bottom_left",
+                    "offset": [
+                        0,
+                        0.0
+                    ],
+                    "size": [
+                        "100%cm+0px",
+                        "100%c+0px"
+                    ],
+                    "layer": 1,
+                    "collection_name": "scoreboard_collection",
+                    "item_count": 0,
+                    "orientation": "vertical",
+                    "property_bag": {
+                        "#itemToggleGrid.item_count": 0
+                    },
+                    "bindings": [
+                        {
+                            "binding_name_override": "#StackGridItemsCount",
+                            "binding_condition": "always",
+                            "binding_name": "#scoreboard_panel.item_count"
+                        }
+                    ],
+                    "controls": [
+                        {
+                            "text@hud_ui.scoreboard_text_panel": {}
+                        }
+                    ]
+                }
+            },
+            {
+                "background@hud_ui.scoreboard_background": {}
+            }
+        ]
+    },
+    "scoreboard_text_panel": {
+        "type": "label",
+        "anchor_from": "left_middle",
+        "anchor_to": "left_middle",
+        "layer": 1,
+        "text": "#scoreboard_panel.text",
+        "text_alignment": "center",
+        "property_bag": {
+            "#scoreboard_panel.text": "Hello World!"
+        },
+        "bindings": [
+            {
+                "binding_type": "collection",
+                "binding_collection_name": "scoreboard_collection",
+                "binding_condition": "always_when_visible",
+                "binding_name": "#scoreboard_panel.text"
+            }
+        ],
+        "controls": [
+            {
+                "background": {
+                    "type": "image",
+                    "layer": -1,
+                    "texture": ""
+                }
+            }
+        ]
+    },
+    "text_panel": {
+        "type": "panel",
+        "size": [
+            "100.0%c+10.0px",
+            "100.0%c+0.0px"
+        ],
+        "layer": -1,
+        "controls": [
+            {
+                "image": {
+                    "type": "image",
+                    "size": [
+                        "100.0%c+8.0px",
+                        "100.0%c+4.0px"
+                    ],
+                    "layer": -1,
+                    "alpha": 0.6,
+                    "clip_direction": "left",
+                    "clip_ratio": 0,
+                    "color": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "nineslice_size": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "texture": "textures/ui/box_number_grey",
+                    "controls": [
+                        {
+                            "text": {
+                                "type": "label",
+                                "font_scale_factor": 0.9,
+                                "font_type": "smooth",
+                                "text": "Hello World!",
+                                "text_alignment": "center"
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

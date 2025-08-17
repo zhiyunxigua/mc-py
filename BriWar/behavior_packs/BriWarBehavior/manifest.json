@@ -1,0 +1,30 @@
+{
+    "format_version": 1,
+    "header": {
+        "min_engine_version": [
+            1,
+            20,
+            50
+        ],
+        "description": "By XiGua",
+        "name": "BriWar",
+        "uuid": "9b1d5784-0026-4875-97eb-3109ff8ab159",
+        "version": [
+            0,
+            0,
+            1
+        ]
+    },
+    "modules": [
+        {
+            "description": "By XiGua",
+            "type": "data",
+            "uuid": "c509ebe8-1318-47cf-a680-f77e46dd3c06",
+            "version": [
+                0,
+                0,
+                1
+            ]
+        }
+    ]
+}

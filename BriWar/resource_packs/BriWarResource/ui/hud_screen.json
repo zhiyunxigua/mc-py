@@ -1,0 +1,187 @@
+{
+  "namespace": "hud",
+
+  //---------------------------------------------------------------------------
+  // Hud Screen
+  //---------------------------------------------------------------------------
+
+  "anim_chat_txt_alpha": {
+    "anim_type": "alpha",
+    "easing": "in_quart",
+    "duration": 1,
+    "from": 1,
+    "to": 0
+  },
+
+  "anim_chat_txt_wait": {
+    "anim_type": "wait",
+    "duration": "$chat_item_lifetime",
+    "next": "@hud.anim_chat_txt_alpha"
+  },
+
+  "anim_chat_bg_alpha": {
+    "anim_type": "alpha",
+    "easing": "in_quart",
+    "destroy_at_end": "chat_grid_item",
+    "duration": 1,
+    "from": 0.7,
+    "to": 0
+  },
+
+  "anim_chat_bg_wait": {
+    "anim_type": "wait",
+    "duration": "$chat_item_lifetime",
+    "next": "@hud.anim_chat_bg_alpha"
+  },
+
+  "chat_label": {
+    "type": "label",
+    "layer": 31,
+    "text": "#text",
+    "size": [ "100%", "default" ],
+    "shadow": true,
+    "localize": false,
+    "color": "$chat_text_color",
+    "font_type": "$chat_font_type",
+    "font_scale_factor": "$chat_font_scale_factor",
+    "line_padding": "$chat_line_spacing",
+    "anims": [
+      "@hud.anim_chat_txt_wait"
+    ],
+    "bindings": [
+      {
+        "binding_name": "#chat_text",
+        "binding_name_override": "#text",
+        "binding_type": "collection",
+        "binding_collection_name": "chat_text_grid",
+        "binding_condition": "once"
+      }
+    ]
+  },
+
+  "chat_grid_item": {
+    "type": "panel",
+    "layer": 1,
+    "size": [ "100%-2px", "100%c" ],
+    "anchor_from": "top_left",
+    "anchor_to": "top_left",
+    "bindings": [
+      {
+        "binding_name": "(not #on_new_death_screen)",
+        "binding_name_override": "#visible"
+      }
+    ],
+    "controls": [
+      {
+        "chat_background": {
+          "type": "image",
+          "texture": "textures/ui/Black",
+          "alpha": 0.7,
+          "size": [ "100%", "100%c" ],
+          "anims": [
+            "@hud.anim_chat_bg_wait"
+          ],
+          "controls": [
+            {
+              "chat_text@chat_label": {
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "offset": [ 2, 0 ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+
+  "chat_panel": {
+    "type": "panel",
+    //Uncomment when text formatting is being accounted for in word length
+    //"clips_children": true,
+    "anchor_from": "top_left",
+    "anchor_to": "top_left",
+    "size": [ "100%", "100%c" ],
+    "max_size": [ "100%", "50%" ],
+
+    "controls": [
+      {
+        "stack_panel": {
+          "type": "stack_panel",
+          "anchor_from": "bottom_left",
+          "anchor_to": "bottom_left",
+          "factory": {
+            "name": "chat_item_factory",
+            "max_children_size": 50,
+            "control_ids": {
+              "chat_item": "chat_item@hud.chat_grid_item"
+            }
+          }
+        }
+      }
+    ]
+  },
+
+  "root_panel/chat_stack": {
+    "type": "stack_panel",
+    "orientation": "vertical",
+    "size": [ "40%", "100%" ],
+    "anchor_from": "top_left",
+    "anchor_to": "top_left",
+    "controls": [
+      {
+        "vr_riding_chat_padding": {
+          "type": "panel",
+          "size": [ "100%", 132 ],
+          "visible": "#vr_riding", //Make this visible to move the chat panel down
+          "bindings": [
+            {
+              "binding_name": "#vr_riding",
+              "binding_name_override": "#visible"
+            }
+          ]
+        }
+      },
+      {
+        "vr_chat_padding": {
+          "type": "panel",
+          "size": [ "100%", 30 ],
+          "visible": "#vr_non_riding", //Make this visible to move the chat panel down
+          "bindings": [
+            {
+              "binding_name": "#vr_non_riding",
+              "binding_name_override": "#visible"
+            }
+          ]
+        }
+      },
+      {
+        "player_info_padding": {
+          "type": "panel",
+          "size": [ "100%", 39 ],
+          "bindings": [
+            {
+              "binding_name": "#player_info.visible",
+              "binding_name_override": "#visible"
+            }
+          ]
+        }
+      },
+      {
+        "non_centered_gui_padding": {
+          "type": "panel",
+          "size": [ "100%", 32 ],
+          "bindings": [
+            {
+              "binding_name": "#hud_visible_not_centered",
+              "binding_name_override": "#visible",
+              "binding_type": "global"
+            }
+          ]
+        }
+      },
+      { "number_of_days_played@hud.number_of_days_played": {} },
+      { "chat_panel@hud.chat_panel": {} }
+    ]
+  }
+}
