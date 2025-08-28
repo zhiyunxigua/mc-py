@@ -3,796 +3,300 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>模板使用教程</title>
+    <title>IP白名单管理工具</title>
     <style>
-        :root {
-            --primary-color: #C7EBC7;
-            --bg-color: #ffffff;
-            --text-color: #333333;
-            --secondary-text: #666666;
-            --border-color: #e0e0e0;
-            --border-radius: 8px;
-            --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            --code-bg: #1e1e1e;
-            --code-header-bg: #252526;
-            --code-text: #d4d4d4;
-            --code-comment: #6A9955;
-            --code-keyword: #CE9178;
-            --code-string: #4F7956;
-            --code-function: #DCDCAA;
-            --code-operator: #D4D4D4;
-            --code-number: #B5CEA8;
-            --code-decorator: #B3AE60;
-        }
-
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
+        
         body {
-            color: var(--text-color);
-            background-color: var(--primary-color);
-            padding: 15px;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .path-border, .file-border {
-            padding: 2px 5px;
-            border-radius: 4px;
-            font-family: monospace;
-        }
-
-        .path-border {
-            border: 1px solid #ccc;
-            background: #f5f5f5;
-        }
-
-        .file-border {
-            border: 1px solid #4CAF50;
-            background: #e8f5e9;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 25px;
-            padding: 15px;
-            background-color: var(--bg-color);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-        }
-
-        h1 {
-            font-size: 22px;
-            font-weight: 600;
-            color: var(--text-color);
-            margin-bottom: 5px;
-        }
-
-        .subtitle {
-            color: var(--secondary-text);
-            font-size: 14px;
-        }
-
-        .card {
-            background-color: var(--bg-color);
-            border-radius: var(--border-radius);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow);
         }
-
-        .card-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            color: #2e7d32;
-        }
-
-        .step {
-            margin-bottom: 20px;
-        }
-
-        .step-number {
-            display: inline-block;
-            width: 22px;
-            height: 22px;
-            background-color: #2e7d32;
-            color: white;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 22px;
-            font-size: 12px;
-            margin-right: 8px;
-        }
-
-        .step-title {
-            font-weight: 500;
-            font-size: 16px;
-            margin-bottom: 10px;
-            display: inline-block;
-        }
-
-        .download-btn {
-            display: inline-flex;
-            align-items: center;
-            background-color: #2e7d32;
-            color: white;
-            padding: 8px 15px;
-            border-radius: var(--border-radius);
-            text-decoration: none;
-            font-weight: 500;
-            margin: 8px 8px 8px 0;
-            transition: all 0.2s;
-            font-size: 14px;
-        }
-
-        .download-btn:hover {
-            background-color: #1b5e20;
-            transform: scale(1.02);
-        }
-
-        .account-list {
-            margin-top: 10px;
-        }
-
-        .account-item {
-            background-color: #f5f5f5;
-            border-radius: var(--border-radius);
-            padding: 12px;
-            margin-bottom: 10px;
-            position: relative;
-            transition: all 0.2s;
-            border: 1px solid var(--border-color);
-        }
-
-        .account-info {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .account-label, .decorator-label {
-            font-weight: 500;
-            margin-bottom: 5px;
-        }
-
-        .account-label {
-            color: #2e7d32;
-        }
-
-        .decorator-label {
-            color: #B3AE60;
-        }
-
-        .copyable {
-            padding: 6px 10px;
-            background-color: white;
-            border-radius: 4px;
-            border: 1px solid var(--border-color);
-            margin-right: 8px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-            font-size: 14px;
-            display: inline-flex;
-            align-items: center;
-        }
-
-        .copyable:hover {
-            background-color: #e8f5e9;
-        }
-
-        .code-container {
-            position: relative;
-            background-color: var(--code-bg);
-            border-radius: 6px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            margin: 20px 0;
+        
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
             overflow: hidden;
         }
-
-        .code-header {
+        
+        header {
+            background: #4b6cb7;
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .description {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            padding: 30px;
+        }
+        
+        .ip-display {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 12px;
-            background-color: var(--code-header-bg);
-            color: #9e9e9e;
-            font-size: 14px;
         }
-
-        .language-label {
-            font-weight: bold;
+        
+        .ip-label {
+            font-weight: 600;
+            color: #495057;
         }
-
-        .copy-btn {
-            background-color: #3e3e42;
-            color: #d4d4d4;
-            border: none;
-            border-radius: 4px;
-            padding: 4px 10px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+        
+        .ip-address {
+            font-size: 20px;
+            font-weight: 600;
+            color: #4b6cb7;
+            font-family: monospace;
         }
-
-        .copy-btn:hover {
-            background-color: #007acc;
-            color: white;
+        
+        .form-group {
+            margin-bottom: 25px;
         }
-
-        pre {
-            margin: 0;
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        input[type="text"] {
+            width: 100%;
             padding: 16px;
-            overflow-x: auto;
-            color: var(--code-text);
-            font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.5;
-            tab-size: 4;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: border-color 0.3s;
         }
-
-        /* Python 代码高亮 */
-        .token.comment {
-            color: var(--code-comment);
-            font-style: italic;
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #4b6cb7;
         }
-        .token.keyword {
-            color: var(--code-keyword);
-            font-weight: bold;
-        }
-        .token.string {
-            color: var(--code-string);
-        }
-        .token.function {
-            color: var(--code-function);
-        }
-        .token.operator {
-            color: var(--code-operator);
-        }
-        .token.number {
-            color: var(--code-number);
-        }
-        .token.decorator {
-            color: var(--code-decorator);
-        }
-        .token.punctuation {
-            color: var(--code-text);
-        }
-        .token.class-name {
-            color: var(--code-function);
-        }
-
-        .copied-notice {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(0, 0, 0, 0.7);
+        
+        button {
+            width: 100%;
+            padding: 16px;
+            background: #4b6cb7;
             color: white;
-            padding: 8px 16px;
-            border-radius: var(--border-radius);
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #3a5999;
+        }
+        
+        button:disabled {
+            background: #adb5bd;
+            cursor: not-allowed;
+        }
+        
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 12px;
+            display: none;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4b6cb7;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #6c757d;
             font-size: 14px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: 100;
-            pointer-events: none;
-        }
-
-        .show-notice {
-            opacity: 1;
-        }
-
-        @media (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
-
-            .card {
-                padding: 15px;
-            }
-
-            .card-title {
-                font-size: 16px;
-            }
-
-            .step-title {
-                font-size: 14px;
-            }
-
-            .download-btn {
-                font-size: 13px;
-                padding: 6px 12px;
-            }
-
-            .copyable {
-                font-size: 13px;
-                padding: 5px 8px;
-            }
+            border-top: 1px solid #e9ecef;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>模板使用教程</h1>
-            <p class="subtitle">作者：西瓜</p>
+            <h1>IP白名单管理工具</h1>
+            <p class="description">添加IPv4地址到白名单系统</p>
         </header>
-
-        <div class="card">
-            <div class="card-title">
-                <span>生成项目结构</span>
+        
+        <div class="main-content">
+            <div class="ip-display">
+                <span class="ip-label">您的IP地址:</span>
+                <span class="ip-address" id="user-ip">正在获取...</span>
             </div>
-
-            <div class="step">
-                <div>
-                    <span class="step-number">1</span>
-                    <span class="step-title">下载工具</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <a href="https://zhiyunxigua.github.io/mc-py/模板生成器.exe" target="_blank" class="download-btn">
-                        <span>⬇️ exe下载</span>
-                    </a>
-                </div>
+            
+            <div class="form-group">
+                <label for="ip-input">输入IPv4地址添加到白名单</label>
+                <input type="text" id="ip-input" placeholder="例如: 0.0.0.0">
             </div>
-
-            <div class="step">
-                <div>
-                    <span class="step-number">2</span>
-                    <span class="step-title">双击运行或用命令行运行</span>
-                </div>
-                <div class="account-list">
-                    <div class="account-item">
-                        <div class="account-label">双击运行</div>
-                        <p>输入项目名字</p>
-                        <p>输入作者名字</p>
-                        <p>输入项目路径（直接回车则在工具同级目录生成）</p>
-                    </div>
-                    <div class="account-item">
-                        <div class="account-label">使用命令行</div>
-                        <div class="account-info">
-                            <span class="copyable" onclick="copyToClipboard('.\\一键生成项目.exe &lt;项目名字&gt; &lt;作者名字&gt; [项目路径]')">.\一键生成项目.exe &lt;项目名字&gt; &lt;作者名字&gt; [项目路径]</span>
-                        </div>
-                    </div>
-                </div>
+            
+            <button id="submit-btn">添加到白名单</button>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                正在提交请求，请稍候...
             </div>
+            
+            <div class="result" id="result"></div>
         </div>
-
-        <div class="card">
-            <div class="card-title">
-                <span>如何使用(服务端)</span>
-            </div>
-
-            <div class="step">
-                <div>
-                    <span class="step-number">1</span>
-                    <span class="step-title">新建模块</span>
-                </div>
-                <div>
-                    <div class="account-label">
-                        在 <span class="path-border">server/module</span> 下新建 <span class="file-border">模块名.py</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="step">
-                <div>
-                    <span class="step-number">2</span>
-                    <span class="step-title">编辑内容，可以看下面示例</span>
-                    <p>导入<span class="file-border">utils.py</span></p>
-                    <p>创建一个<span class="file-border">ExampleModule</span>类，并继承<span class="file-border">BaseModule</span></p>
-                </div>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="language-label">Python</span>
-                        <button class="copy-btn" onclick="copyCode('ExampleModule')">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                            </svg>
-                            复制
-                        </button>
-                    </div>
-                    <pre id="ExampleModule"><code class="language-python"># coding=utf-8
-"""
-Created on 2025-8-14
-示例模块
-这里主要 提供一个示例
-接口：
--
-"""
-from ..utils import *
-
-
-class ExampleModule(BaseModule):
-    def __init__(self):
-        super(ExampleModule, self).__init__()</code></pre>
-                </div>
-            </div>
-
-            <div class="step">
-                <span class="step-number">3</span>
-                <span class="step-title">在<span class="file-border">main.py</span>注册这个模块</span>
-                <p>导入<span class="file-border">ExampleModule.py</span>这个模块的类</p>
-                <p>创建一个全局变量<span class="file-border">ExampleModule</span></p>
-                <p>给全局变量赋值<span class="file-border">ExampleModule()</span></p>
-            </div>
-
-            <div class="code-container">
-                <div class="code-header">
-                    <span class="language-label">Python</span>
-                    <button class="copy-btn" onclick="copyCode('server_main')">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                        </svg>
-                        复制
-                    </button>
-                </div>
-                <pre id="server_main"><code class="language-python"># coding=utf-8
-from utils import *
-from module.ExampleModule import ExampleModule  # 导入这个模块的类  &lt;------
-
-
-class Main(BaseServer):
-    def __init__(self, namespace, systemName):
-        super(Main, self).__init__(namespace, systemName)
-        self.ExampleModule = None  # 创建一个全局变量    &lt;------------
-
-    @Listen()
-    def LoadServerAddonScriptsAfter(self, args):
-        self.register_module()
-
-    def register_module(self):
-        self.ExampleModule = ExampleModule()  # 赋值    &lt;-----------</code></pre>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-title">
-                <span>如何使用(客户端)</span>
-            </div>
-
-            <div class="step">
-                <div>
-                    <span class="step-number">1</span>
-                    <span class="step-title">新建模块和注册模块</span>
-                </div>
-                <div>
-                    <div class="account-label">和服务端同理，这里不再多说</div>
-                </div>
-            </div>
-            <div class="step">
-                <div>
-                    <span class="step-number">2</span>
-                    <span class="step-title">注册UI</span>
-                    <p>在 <span class="path-border">client/ui</span> 下新建 <span class="file-border">ExampleUI.py</span></p>
-                    <p>导入<span class="file-border">utils.py</span></p>
-                    <p>创建一个<span class="file-border">ExampleUI</span>类，并继承<span class="file-border">BaseCustomScreen</span></p>
-                </div>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="language-label">Python</span>
-                        <button class="copy-btn" onclick="copyCode('reg_ui')">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                            </svg>
-                            复制
-                        </button>
-                    </div>
-                    <pre id="reg_ui"><code class="language-python"># coding=utf-8
-"""
-Created on 2025-08-14
-模板UI系统
-这里主要 提供一个模板
-"""
-from utils import *
-
-
-class Main(BaseCustomScreen):
-    def __init__(self, namespace, name, param):
-        super(Main, self).__init__(namespace, name, param)
-
-    def Create(self): # 当界面加载完成后
-        pass
-
-    def OnActive(self):  # UI重新回到栈顶时调用
-        pass
-
-    def OnDeactive(self):  # 栈顶UI有其他UI入栈时调用
-        pass
-
-    def Destroy(self):  # 销毁时调用
-        pass</code></pre>
-                </div>
-            </div>
-
-            <div class="step">
-                <div>
-                    <span class="step-number">2</span>
-                    <span class="step-title">继承原版UI</span>
-                    <p>在 <span class="path-border">client/ui</span> 下新建 <span class="file-border">ExampleProxy.py</span></p>
-                    <p>导入<span class="file-border">utils.py</span></p>
-                    <p>创建一个<span class="file-border">ExampleProxy</span>类，并继承<span class="file-border">BaseCustomScreenProxy</span></p>
-                </div>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="language-label">Python</span>
-                        <button class="copy-btn" onclick="copyCode('reg_custom_ui')">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                            </svg>
-                            复制
-                        </button>
-                    </div>
-                    <pre id="reg_custom_ui"><code class="language-python"># coding=utf-8
-"""
-Created on 2025-08-14
-模板UI系统
-这里主要 提供一个模板
-"""
-from utils import *
-
-
-class Main(BaseCustomScreenProxy):
-    def __init__(self, namespace, name, param):
-        super(Main, self).__init__(namespace, name, param)
-
-    def OnCreate(self): # 当界面加载完成后
-        pass
-
-    def OnDestroy(self):  # 销毁时调用
-        pass</code></pre>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-title">
-                <span>监听器教程</span>
-            </div>
-
-            <div class="step">
-                <div>
-                    <span class="step-number">1</span>
-                    <span class="step-title">什么都不传入</span>
-                    <p class="decorator-label">@Listen()</p>
-                </div>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="language-label">Python</span>
-                        <button class="copy-btn" onclick="copyCode('Listen')">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                            </svg>
-                            复制
-                        </button>
-                    </div>
-                    <pre id="Listen"><code class="language-python">@Listen()
-def 事件名():
-    pass</code></pre>
-                </div>
-            </div>
-
-            <div class="step">
-                <div>
-                    <span class="step-number">2</span>
-                    <span class="step-title">可以传入这三个参数</span>
-                    <p class="decorator-label">@Listen("事件名", 系统名, 优先级)</p>
-                    <p>优先级越高越后处理，默认3</p>
-                </div>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="language-label">Python</span>
-                        <button class="copy-btn" onclick="copyCode('Listen_1')">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                            </svg>
-                            复制
-                        </button>
-                    </div>
-                    <pre id="Listen_1"><code class="language-python">@Listen("eventName", Listen.server, 0)
-def listen_example():
-    pass</code></pre>
-                </div>
-            </div>
-
-            <div class="step">
-                <div>
-                    <span class="step-number">3</span>
-                    <span class="step-title">可以只传入指定参数</span>
-                    <p class="decorator-label">@Listen(event_type="系统名")</p>
-                </div>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="language-label">Python</span>
-                        <button class="copy-btn" onclick="copyCode('Listen_2')">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                            </svg>
-                            复制
-                        </button>
-                    </div>
-                    <pre id="Listen_2"><code class="language-python">@Listen(event_name=事件名)
-def listen_example():
-    pass
-
-@Listen(event_type=example)
-def 事件名():
-    pass
-
-@Listen(priority=5)
-def 事件名():
-    pass</code></pre>
-                </div>
-            </div>
-        </div>
+        
+        <footer>
+            <p>© 2023 网络安全管理工具 | 仅限授权用户使用</p>
+        </footer>
     </div>
-    <div class="copied-notice" id="copiedNotice">已复制到剪贴板</div>
 
     <script>
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                showNotice();
-            }).catch(err => {
-                // Fallback for browsers that don't support Clipboard API
-                const textarea = document.createElement('textarea');
-                textarea.value = text;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-                showNotice();
-            });
-        }
-
-        function copyCode(code_id) {
-            const codeElement = document.getElementById(code_id).querySelector('code');
-            const code = codeElement ? codeElement.textContent : document.getElementById(code_id).textContent;
-            copyToClipboard(code);
-        }
-
-        function showNotice() {
-            const notice = document.getElementById('copiedNotice');
-            notice.classList.add('show-notice');
-            setTimeout(() => {
-                notice.classList.remove('show-notice');
-            }, 2000);
-        }
-
-document.addEventListener('DOMContentLoaded', function() {
-    const codeBlocks = document.querySelectorAll('code.language-python');
-
-    codeBlocks.forEach(block => {
-        // 保存原始文本
-        const originalText = block.textContent;
-        let highlightedText = '';
-        let currentPos = 0;
-
-        // 关键字列表
-        const keywords = ['class', 'def', 'from', 'import', 'return', 'pass', 'super',
-                        'self', 'None', 'True', 'False', 'if', 'else', 'elif', 'for',
-                        'while', 'try', 'except', 'finally', 'with', 'as', 'and',
-                        'or', 'not', 'is', 'in ', 'lambda', 'nonlocal', 'global', 'yield',
-                        'async', 'await'];
-
-        // 处理每一行
-        const lines = originalText.split('\n');
-
-        lines.forEach((line, lineIndex) => {
-            let lineContent = '';
-            let i = 0;
-
-            while (i < line.length) {
-                // 处理多行注释
-                if (line.substr(i, 3) === '"""') {
-                    const endPos = line.indexOf('"""', i + 3);
-                    if (endPos === -1) {
-                        lineContent += '<span class="token comment">' + line.substring(i) + '</span>';
-                        i = line.length;
+        document.addEventListener('DOMContentLoaded', function() {
+            const ipInput = document.getElementById('ip-input');
+            const submitBtn = document.getElementById('submit-btn');
+            const resultDiv = document.getElementById('result');
+            const loadingDiv = document.getElementById('loading');
+            const userIpSpan = document.getElementById('user-ip');
+            
+            // 获取用户IP地址
+            fetch('https://https://ipinfo.io/ip')
+                .then(response => response.json())
+                .then(data => {
+                    userIpSpan.textContent = data.ip;
+                })
+                .catch(() => {
+                    userIpSpan.textContent = '无法获取IP地址';
+                });
+            
+            // 验证IPv4格式
+            function isValidIPv4(ip) {
+                const ipv4Pattern = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
+                if (!ipv4Pattern.test(ip)) return false;
+                
+                const parts = ip.split('.');
+                return parts.every(part => {
+                    const num = parseInt(part, 10);
+                    return num >= 0 && num <= 255;
+                });
+            }
+            
+            // 显示结果消息
+            function showResult(message, isSuccess) {
+                resultDiv.style.display = 'block';
+                resultDiv.className = isSuccess ? 'result success' : 'result error';
+                resultDiv.innerHTML = `<strong>${isSuccess ? '成功' : '错误'}:</strong> ${message}`;
+                
+                // 5秒后自动隐藏结果
+                setTimeout(() => {
+                    resultDiv.style.display = 'none';
+                }, 5000);
+            }
+            
+            // 处理表单提交
+            submitBtn.addEventListener('click', function() {
+                const ip = ipInput.value.trim();
+                
+                if (!ip) {
+                    showResult('请输入IP地址', false);
+                    return;
+                }
+                
+                if (!isValidIPv4(ip)) {
+                    showResult('请输入有效的IPv4地址', false);
+                    return;
+                }
+                
+                // 显示加载状态
+                loadingDiv.style.display = 'block';
+                submitBtn.disabled = true;
+                
+                // 发送API请求
+                fetch('https://apollo-gateway.hihaar.com/gateway/netease/ip-whitelist/add/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'QCq2ndCaX7OxMFKPukEa9rXaE3DrURUoHt8g6kLs4Z6iv5fYiYbMLotMu4dqNJvr'
+                    },
+                    body: JSON.stringify({ ip: ip })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showResult('IP地址已成功添加到白名单', true);
+                        ipInput.value = '';
                     } else {
-                        lineContent += '<span class="token comment">' + line.substring(i, endPos + 3) + '</span>';
-                        i = endPos + 3;
+                        showResult(data.message || '添加失败，请稍后重试', false);
                     }
-                    continue;
+                })
+                .catch(error => {
+                    showResult('网络错误: ' + error.message, false);
+                })
+                .finally(() => {
+                    loadingDiv.style.display = 'none';
+                    submitBtn.disabled = false;
+                });
+            });
+            
+            // 按Enter键提交
+            ipInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    submitBtn.click();
                 }
-
-                // 处理单行注释
-                if (line[i] === '#') {
-                    lineContent += '<span class="token comment">' + line.substring(i) + '</span>';
-                    break;
-                }
-
-                // 处理字符串
-                if (line[i] === '"' || line[i] === "'") {
-                    const quoteChar = line[i];
-                    let endPos = i + 1;
-
-                    while (endPos < line.length) {
-                        if (line[endPos] === quoteChar && line[endPos - 1] !== '\\') {
-                            break;
-                        }
-                        endPos++;
-                    }
-
-                    if (endPos >= line.length) endPos = line.length - 1;
-
-                    lineContent += '<span class="token string">' + line.substring(i, endPos + 1) + '</span>';
-                    i = endPos + 1;
-                    continue;
-                }
-
-                // 处理装饰器
-                if (line[i] === '@') {
-                    const endPos = line.indexOf(' ', i);
-                    const decoratorEnd = endPos === -1 ? line.length : endPos;
-
-                    lineContent += '<span class="token decorator">' + line.substring(i, decoratorEnd) + '</span>';
-                    i = decoratorEnd;
-                    continue;
-                }
-
-                // 处理关键字
-                let keywordFound = false;
-                for (const keyword of keywords) {
-                    if (line.substr(i, keyword.length) === keyword &&
-                        (i + keyword.length >= line.length || !/\w/.test(line[i + keyword.length]))) {
-                        lineContent += '<span class="token keyword">' + keyword + '</span>';
-                        i += keyword.length;
-                        keywordFound = true;
-                        break;
-                    }
-                }
-
-                if (keywordFound) continue;
-
-                // 处理数字
-                if (/\d/.test(line[i])) {
-                    let endPos = i + 1;
-                    while (endPos < line.length && /\d/.test(line[endPos])) {
-                        endPos++;
-                    }
-
-                    lineContent += '<span class="token number">' + line.substring(i, endPos) + '</span>';
-                    i = endPos;
-                    continue;
-                }
-
-                // 默认情况，直接添加字符
-                lineContent += line[i];
-                i++;
-            }
-
-            highlightedText += lineContent;
-            if (lineIndex < lines.length - 1) {
-                highlightedText += '\n'; // 保留换行符
-            }
+            });
         });
-
-        // 设置处理后的HTML
-        block.innerHTML = highlightedText;
-    });
-});
     </script>
 </body>
 </html>
