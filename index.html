@@ -3,300 +3,410 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IP白名单管理工具</title>
+    <title>初云杯测试指南 | 清新风格</title>
     <style>
+        :root {
+            --primary-color: #C7EBC7;
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --secondary-text: #666666;
+            --border-color: #e0e0e0;
+            --border-radius: 8px;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--primary-color);
+            padding: 15px;
+            -webkit-font-smoothing: antialiased;
         }
         
         .container {
-            width: 100%;
-            max-width: 600px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-            overflow: hidden;
+            max-width: 800px;
+            margin: 0 auto;
         }
         
         header {
-            background: #4b6cb7;
-            color: white;
-            padding: 25px 30px;
             text-align: center;
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: var(--bg-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
         }
         
         h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
+            font-size: 22px;
             font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 5px;
         }
         
-        .description {
-            font-size: 16px;
-            opacity: 0.9;
+        .subtitle {
+            color: var(--secondary-text);
+            font-size: 14px;
         }
         
-        .main-content {
-            padding: 30px;
-        }
-        
-        .ip-display {
-            background: #f8f9fa;
-            border-radius: 12px;
+        .card {
+            background-color: var(--bg-color);
+            border-radius: var(--border-radius);
             padding: 20px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
             display: flex;
-            justify-content: space-between;
+            align-items: center;
+            color: #2e7d32;
+        }
+        
+        .card-title .icon {
+            margin-right: 10px;
+        }
+        
+        .step {
+            margin-bottom: 20px;
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 22px;
+            height: 22px;
+            background-color: #2e7d32;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 22px;
+            font-size: 12px;
+            margin-right: 8px;
+        }
+        
+        .step-title {
+            font-weight: 500;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            background-color: #2e7d32;
+            color: white;
+            padding: 8px 15px;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            font-weight: 500;
+            margin: 8px 8px 8px 0;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+        
+        .download-btn:hover {
+            background-color: #1b5e20;
+            transform: scale(1.02);
+        }
+        
+        .download-btn .icon {
+            margin-right: 6px;
+        }
+        
+        .account-list {
+            margin-top: 10px;
+        }
+        
+        .account-item {
+            background-color: #f5f5f5;
+            border-radius: var(--border-radius);
+            padding: 12px;
+            margin-bottom: 10px;
+            position: relative;
+            transition: all 0.2s;
+            border: 1px solid var(--border-color);
+        }
+        
+        .account-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .account-label {
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: #2e7d32;
+        }
+        
+        .copyable {
+            padding: 6px 10px;
+            background-color: white;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            margin-right: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            font-size: 14px;
+            display: inline-flex;
             align-items: center;
         }
         
-        .ip-label {
-            font-weight: 600;
-            color: #495057;
+        .copyable:hover {
+            background-color: #e8f5e9;
         }
         
-        .ip-address {
-            font-size: 20px;
-            font-weight: 600;
-            color: #4b6cb7;
-            font-family: monospace;
+        .copyable:active {
+            transform: scale(0.98);
         }
         
-        .form-group {
-            margin-bottom: 25px;
+        .copyable::after {
+            content: "点击复制";
+            position: absolute;
+            right: -60px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            color: var(--secondary-text);
+            opacity: 0;
+            transition: opacity 0.2s;
+            white-space: nowrap;
         }
         
-        label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: 600;
-            color: #495057;
+        .copyable:hover::after {
+            opacity: 1;
         }
         
-        input[type="text"] {
-            width: 100%;
-            padding: 16px;
-            border: 2px solid #e9ecef;
-            border-radius: 12px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-        
-        input[type="text"]:focus {
-            outline: none;
-            border-color: #4b6cb7;
-        }
-        
-        button {
-            width: 100%;
-            padding: 16px;
-            background: #4b6cb7;
+        .copied-notice {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
             color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        
-        button:hover {
-            background: #3a5999;
-        }
-        
-        button:disabled {
-            background: #adb5bd;
-            cursor: not-allowed;
-        }
-        
-        .result {
-            margin-top: 25px;
-            padding: 20px;
-            border-radius: 12px;
-            display: none;
-        }
-        
-        .success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        
-        .error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        
-        .loading {
-            display: none;
-            text-align: center;
-            margin-top: 20px;
-        }
-        
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #4b6cb7;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: #6c757d;
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
             font-size: 14px;
-            border-top: 1px solid #e9ecef;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 100;
+            pointer-events: none;
+        }
+        
+        .show-notice {
+            opacity: 1;
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            
+            .card {
+                padding: 15px;
+            }
+            
+            .card-title {
+                font-size: 16px;
+            }
+            
+            .step-title {
+                font-size: 14px;
+            }
+            
+            .download-btn {
+                font-size: 13px;
+                padding: 6px 12px;
+            }
+            
+            .copyable {
+                font-size: 13px;
+                padding: 5px 8px;
+            }
+            
+            .copyable::after {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>IP白名单管理工具</h1>
-            <p class="description">添加IPv4地址到白名单系统</p>
+            <h1>初云杯测试指南</h1>
+            <p class="subtitle">请按照以下步骤进行测试环境配置</p>
         </header>
         
-        <div class="main-content">
-            <div class="ip-display">
-                <span class="ip-label">您的IP地址:</span>
-                <span class="ip-address" id="user-ip">正在获取...</span>
+        <div class="card">
+            <div class="card-title">
+                <span class="icon">📱</span>
+                <span>手机端测试指南</span>
             </div>
             
-            <div class="form-group">
-                <label for="ip-input">输入IPv4地址添加到白名单</label>
-                <input type="text" id="ip-input" placeholder="例如: 0.0.0.0">
+            <div class="step">
+                <div>
+                    <span class="step-number">1</span>
+                    <span class="step-title">下载测试版MC</span>
+                </div>
+                <div style="margin-top: 10px;">
+                    <a href="https://g79.gdl.netease.com/dev_launcher_3.4.200.273179.apk?key1=a8ba36dfa104c9e6b2ff4a856657f0a1&key2=6893f549" target="_blank" class="download-btn" onclick="copyLink(event, 'https://g79.gdl.netease.com/dev_launcher_3.4.200.273179.apk?key1=a8ba36dfa104c9e6b2ff4a856657f0a1&key2=6893f549')">
+                        <span class="icon">⬇️</span>
+                        <span>安卓下载</span>
+                    </a>
+                    <a href="https://testflight.apple.com/join/mOxZm1dD" target="_blank" class="download-btn" onclick="copyLink(event, 'https://testflight.apple.com/join/mOxZm1dD')">
+                        <span class="icon">⬇️</span>
+                        <span>苹果下载</span>
+                    </a>
+                </div>
             </div>
             
-            <button id="submit-btn">添加到白名单</button>
-            
-            <div class="loading" id="loading">
-                <div class="spinner"></div>
-                正在提交请求，请稍候...
+            <div class="step">
+                <div>
+                    <span class="step-number">2</span>
+                    <span class="step-title">登录测试账号</span>
+                </div>
+                <div class="account-list">
+                    <div class="account-item">
+                        <div class="account-label">初云测试服3</div>
+                        <div class="account-info">
+                            <span class="copyable" onclick="copyToClipboard('shuxiang98303@163.com')">邮箱: shuxiang98303@163.com</span>
+                            <span class="copyable" onclick="copyToClipboard('qqqqpppp')">密码: qqqqpppp</span>
+                        </div>
+                    </div>
+                    <div class="account-item">
+                        <div class="account-label">初云测试号4</div>
+                        <div class="account-info">
+                            <span class="copyable" onclick="copyToClipboard('meifu644702@163.com')">邮箱: meifu644702@163.com</span>
+                            <span class="copyable" onclick="copyToClipboard('heny44217')">密码: heny44217</span>
+                        </div>
+                    </div>
+                    <div class="account-item">
+                        <div class="account-label">初云测试号5</div>
+                        <div class="account-info">
+                            <span class="copyable" onclick="copyToClipboard('donghunshe663@163.com')">邮箱: donghunshe663@163.com</span>
+                            <span class="copyable" onclick="copyToClipboard('jujh113149')">密码: jujh113149</span>
+                        </div>
+                    </div>
+                </div>
             </div>
             
-            <div class="result" id="result"></div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <span class="step-title">打开网络游戏，选择"初云杯"</span>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">4</span>
+                <span class="step-title">使用"选择游戏"进入"生存之花"</span>
+            </div>
         </div>
         
-        <footer>
-            <p>© 2023 网络安全管理工具 | 仅限授权用户使用</p>
-        </footer>
+        <div class="card">
+            <div class="card-title">
+                <span class="icon">💻</span>
+                <span>电脑端测试指南</span>
+            </div>
+            
+            <div class="step">
+                <div>
+                    <span class="step-number">1</span>
+                    <span class="step-title">下载测试版MC</span>
+                </div>
+                <div style="margin-top: 10px;">
+                    <a href="https://adl.netease.com/d/g/mc/c/dev" target="_blank" class="download-btn" onclick="copyLink(event, 'https://adl.netease.com/d/g/mc/c/dev')">
+                        <span class="icon">⬇️</span>
+                        <span>Windows下载</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div>
+                    <span class="step-number">2</span>
+                    <span class="step-title">登录测试账号</span>
+                </div>
+                <div class="account-list">
+                    <div class="account-item">
+                        <div class="account-label">初云测试服3</div>
+                        <div class="account-info">
+                            <span class="copyable" onclick="copyToClipboard('shuxiang98303@163.com')">邮箱: shuxiang98303@163.com</span>
+                            <span class="copyable" onclick="copyToClipboard('qqqqpppp')">密码: qqqqpppp</span>
+                        </div>
+                    </div>
+                    <div class="account-item">
+                        <div class="account-label">初云测试号4</div>
+                        <div class="account-info">
+                            <span class="copyable" onclick="copyToClipboard('meifu644702@163.com')">邮箱: meifu644702@163.com</span>
+                            <span class="copyable" onclick="copyToClipboard('heny44217')">密码: heny44217</span>
+                        </div>
+                    </div>
+                    <div class="account-item">
+                        <div class="account-label">初云测试号5</div>
+                        <div class="account-info">
+                            <span class="copyable" onclick="copyToClipboard('donghunshe663@163.com')">邮箱: donghunshe663@163.com</span>
+                            <span class="copyable" onclick="copyToClipboard('jujh113149')">密码: jujh113149</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">3</span>
+                <span class="step-title">打开基岩版服务器标签页</span>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">4</span>
+                <span class="step-title">鼠标放到"初云杯服务器"上，选择"开发测试"</span>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">5</span>
+                <span class="step-title">右键"加入游戏"，选择"生存之花"</span>
+            </div>
+        </div>
     </div>
-
+    
+    <div class="copied-notice" id="copiedNotice">已复制到剪贴板</div>
+    
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const ipInput = document.getElementById('ip-input');
-            const submitBtn = document.getElementById('submit-btn');
-            const resultDiv = document.getElementById('result');
-            const loadingDiv = document.getElementById('loading');
-            const userIpSpan = document.getElementById('user-ip');
-            
-            // 获取用户IP地址
-            fetch('https://https://ipinfo.io/ip')
-                .then(response => response.json())
-                .then(data => {
-                    userIpSpan.textContent = data.ip;
-                })
-                .catch(() => {
-                    userIpSpan.textContent = '无法获取IP地址';
-                });
-            
-            // 验证IPv4格式
-            function isValidIPv4(ip) {
-                const ipv4Pattern = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
-                if (!ipv4Pattern.test(ip)) return false;
-                
-                const parts = ip.split('.');
-                return parts.every(part => {
-                    const num = parseInt(part, 10);
-                    return num >= 0 && num <= 255;
-                });
-            }
-            
-            // 显示结果消息
-            function showResult(message, isSuccess) {
-                resultDiv.style.display = 'block';
-                resultDiv.className = isSuccess ? 'result success' : 'result error';
-                resultDiv.innerHTML = `<strong>${isSuccess ? '成功' : '错误'}:</strong> ${message}`;
-                
-                // 5秒后自动隐藏结果
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showNotice();
+            });
+        }
+        
+        function copyLink(event, link) {
+            event.preventDefault();
+            navigator.clipboard.writeText(link).then(() => {
+                showNotice();
+                // 延迟跳转以确保复制完成
                 setTimeout(() => {
-                    resultDiv.style.display = 'none';
-                }, 5000);
-            }
-            
-            // 处理表单提交
-            submitBtn.addEventListener('click', function() {
-                const ip = ipInput.value.trim();
-                
-                if (!ip) {
-                    showResult('请输入IP地址', false);
-                    return;
-                }
-                
-                if (!isValidIPv4(ip)) {
-                    showResult('请输入有效的IPv4地址', false);
-                    return;
-                }
-                
-                // 显示加载状态
-                loadingDiv.style.display = 'block';
-                submitBtn.disabled = true;
-                
-                // 发送API请求
-                fetch('https://apollo-gateway.hihaar.com/gateway/netease/ip-whitelist/add/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'QCq2ndCaX7OxMFKPukEa9rXaE3DrURUoHt8g6kLs4Z6iv5fYiYbMLotMu4dqNJvr'
-                    },
-                    body: JSON.stringify({ ip: ip })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        showResult('IP地址已成功添加到白名单', true);
-                        ipInput.value = '';
-                    } else {
-                        showResult(data.message || '添加失败，请稍后重试', false);
-                    }
-                })
-                .catch(error => {
-                    showResult('网络错误: ' + error.message, false);
-                })
-                .finally(() => {
-                    loadingDiv.style.display = 'none';
-                    submitBtn.disabled = false;
-                });
+                    window.open(link, '_blank');
+                }, 100);
             });
-            
-            // 按Enter键提交
-            ipInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    submitBtn.click();
-                }
-            });
-        });
+        }
+        
+        function showNotice() {
+            const notice = document.getElementById('copiedNotice');
+            notice.classList.add('show-notice');
+            setTimeout(() => {
+                notice.classList.remove('show-notice');
+            }, 2000);
+        }
     </script>
 </body>
 </html>
