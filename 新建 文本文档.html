@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+<title>粉色粒子跳动爱心 + 烟花 + 文字粒子切换</title>
+<style>
+  html,body {
+    height:100%;
+    margin:0;
+    background:#000; /* 初始全黑 */
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  canvas {
+    display:block;
+    width:100%;
+    height:100%;
+  }
+  /* 一个可选的控制层（隐藏） */
+  #ui { position:fixed; left:10px; top:10px; color:#fff; font-family: sans-serif; z-index:10; opacity:0.8; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="ui" style="display:none;">
+  <button id="debug">debug</button>
+</div>
+
+<script>
+/*
+  粒子文字/爱心/烟花动画
+  - 粒子主体（mainParticles）用于组成爱心或文字
+  - 烟花有 rocketParticles (飞行) 和 explosionParticles (爆炸)
+  - 文本通过离屏 canvas renderText，然后采样像素点得到目标位置
+  - 爱心形状通过在离屏 canvas 绘制心形路径来采样（这样更稳定）
+  - 音效使用 WebAudio（简单合成）
+*/
+
+(() => {
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d', { alpha: false });
+
+  // 设备像素比处理
+  function resizeCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.floor(window.innerWidth * dpr);
+    canvas.height = Math.floor(window.innerHeight * dpr);
+    canvas.style.width = window.innerWidth + 'px';
+    canvas.style.height = window.innerHeight + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  // ============= 参数 =============
+  const MAIN_PARTICLE_COUNT = 1500; // 主体粒子数（可以调）
+  const SAMPLE_GAP = 6; // 采样间隔（像素），越小文本越密集但性能消耗高
+  const PARTICLE_SIZE = 1.6; // 粒子绘制半径（物理像素）
+  const TEXT_SCALE_BASE = 1.0; // 默认文字缩放
+  const HEART_PULSE_FREQ = 1.2; // 脉动频率（Hz）
+  const HEART_PULSE_AMPL = 0.12; // 脉动幅度
+  const SWITCH_DELAY = 5000; // 5秒后开始首条文本（ms）
+  const PHRASE_INTERVAL = 4000; // 每句显示时长（ms）
+  const FIREWORK_SPAWN_INTERVAL = 700; // 平均多少ms发射一颗烟花
+  const ROCKET_MIN_SPEED = 3.2;
+  const ROCKET_MAX_SPEED = 5.2;
+
+  // 文字数组（首句必须为 "云云爱你哟❤"）
+  const phrases = [
+    "云云爱你哟❤",
+    "愿你笑口常开",
+    "愿你平安喜乐",
+    "愿你心想事成",
+    "愿你万事如意",
+    "❤我会永远陪着你"
+  ];
+
+  // ============= WebAudio 简单音效 =============
+  let audioCtx = null;
+  function ensureAudio() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+  }
+  function playChime() {
+    ensureAudio();
+    const t = audioCtx.currentTime;
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(880, t);
+    o.frequency.exponentialRampToValueAtTime(1320, t + 0.15);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.2, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.6);
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(t); o.stop(t + 0.7);
+  }
+  function playBoom() {
+    ensureAudio();
+    const t = audioCtx.currentTime;
+    const noiseBuffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.25, audioCtx.sampleRate);
+    const data = noiseBuffer.getChannelData(0);
+    for (let i=0;i<data.length;i++) data[i] = (Math.random() * 2 - 1) * Math.exp(-3*i/data.length);
+    const src = audioCtx.createBufferSource();
+    src.buffer = noiseBuffer;
+    const g = audioCtx.createGain();
+    g.gain.value = 0.6;
+    src.connect(g);
+    g.connect(audioCtx.destination);
+    src.start(t);
+  }
+
+  // ============= 离屏 canvas 用于采样文字与爱心 =============
+  const off = document.createElement('canvas');
+  const offCtx = off.getContext('2d');
+
+  function fitOffCanvas(widthPx, heightPx) {
+    off.width = Math.ceil(widthPx);
+    off.height = Math.ceil(heightPx);
+  }
+
+  // 渲染任意文本并返回采样点数组（相对于中心）
+  function sampleTextToPoints(text, fontSize, fontFamily='sans-serif', gap=SAMPLE_GAP, color='#fff') {
+    // Setup offscreen size relative to visible canvas
+    const w = Math.min(window.innerWidth * 0.95, 1200);
+    const h = Math.min(window.innerHeight * 0.7, 800);
+    fitOffCanvas(w, h);
+    offCtx.clearRect(0,0, off.width, off.height);
+    offCtx.fillStyle = color;
+    offCtx.textAlign = 'center';
+    offCtx.textBaseline = 'middle';
+    offCtx.font = `bold ${fontSize}px ${fontFamily}`;
+    // center text
+    offCtx.fillText(text, off.width / 2, off.height / 2);
+    // sample
+    const img = offCtx.getImageData(0,0,off.width, off.height).data;
+    const points = [];
+    for (let y=0; y<off.height; y+=gap) {
+      for (let x=0; x<off.width; x+=gap) {
+        const idx = (y * off.width + x) * 4;
+        const alpha = img[idx+3];
+        if (alpha > 128) {
+          // position relative to center of screen (in CSS pixels)
+          const rx = x - off.width/2;
+          const ry = y - off.height/2;
+          points.push({x: rx, y: ry});
+        }
+      }
+    }
+    return {points, width: off.width, height: off.height};
+  }
+
+  // 渲染心形（使用 path）并采样点
+  function sampleHeartToPoints(sizePx, gap=SAMPLE_GAP) {
+    // create heart path in offscreen canvas centered
+    const w = Math.ceil(sizePx * 1.4);
+    const h = Math.ceil(sizePx * 1.2);
+    fitOffCanvas(w, h);
+    offCtx.clearRect(0,0,w,h);
+    offCtx.fillStyle = '#fff';
+    offCtx.save();
+    offCtx.translate(w/2, h/2);
+    const s = sizePx / 100; // scale param
+    // draw heart using parametric or bezier path scaled
+    offCtx.beginPath();
+    // using canonical heart bezier
+    const topY = -20 * s;
+    offCtx.moveTo(0, -30*s);
+    offCtx.bezierCurveTo(25*s, -60*s, 90*s, -25*s, 0, 40*s);
+    offCtx.bezierCurveTo(-90*s, -25*s, -25*s, -60*s, 0, -30*s);
+    offCtx.closePath();
+    offCtx.fill();
+    offCtx.restore();
+    // sample
+    const img = offCtx.getImageData(0,0,w,h).data;
+    const points = [];
+    for (let y=0; y<h; y+=gap) {
+      for (let x=0; x<w; x+=gap) {
+        const idx = (y * w + x) * 4;
+        const alpha = img[idx+3];
+        if (alpha > 128) {
+          const rx = x - w/2;
+          const ry = y - h/2;
+          points.push({x: rx, y: ry});
+        }
+      }
+    }
+    return {points, width: w, height: h};
+  }
+
+  // ============= 粒子类（用于组成文字/爱心） =============
+  class MainParticle {
+    constructor(x,y) {
+      // initial random position on screen
+      this.x = Math.random() * canvas.width / DPR_CSS - canvas.width / DPR_CSS/2;
+      this.y = (Math.random() * canvas.height / DPR_CSS - canvas.height / DPR_CSS/2);
+      this.tx = this.x; // target
+      this.ty = this.y;
+      this.color = randomPink();
+      this.size = PARTICLE_SIZE;
+      this.id = Math.random();
+    }
+    update(dt) {
+      // no inertia: smooth direct move towards target using interpolation
+      const ease = 0.18; // 控制移动快慢（越大越快）
+      this.x += (this.tx - this.x) * ease;
+      this.y += (this.ty - this.y) * ease;
+    }
+    draw(ctx, cx, cy) {
+      ctx.beginPath();
+      ctx.fillStyle = this.color;
+      ctx.arc(cx + this.x, cy + this.y, this.size, 0, Math.PI*2);
+      ctx.fill();
+    }
+  }
+
+  // ============= 烟花类（简单） =============
+  class Rocket {
+    constructor(x, speed, hue) {
+      this.x = x;
+      this.y = window.innerHeight + 10;
+      this.vy = -speed;
+      this.vx = (Math.random()-0.5) * 0.6;
+      this.hue = hue;
+      this.exploded = false;
+      this.ttl = 4000; // safety
+    }
+    update(dt) {
+      this.y += this.vy;
+      this.x += this.vx;
+      this.vy += 0.02; // gravity small
+      this.ttl -= dt;
+      if (this.vy >= -0.8 || this.y < window.innerHeight * 0.25 || this.ttl <=0) {
+        this.exploded = true;
+      }
+    }
+    draw(ctx) {
+      ctx.beginPath();
+      ctx.fillStyle = `hsl(${this.hue},80%,60%)`;
+      ctx.arc(this.x, this.y, 2.2,0,Math.PI*2);
+      ctx.fill();
+    }
+  }
+  class ExplosionParticle {
+    constructor(x,y, hue) {
+      this.x = x; this.y=y;
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 1 + Math.random()*4;
+      this.vx = Math.cos(angle)*speed;
+      this.vy = Math.sin(angle)*speed;
+      this.hue = hue + (Math.random()*40-20);
+      this.life = 1200 + Math.random()*800;
+      this.age = 0;
+      this.size = 1 + Math.random()*2;
+    }
+    update(dt) {
+      this.vy += 0.03; // gravity
+      this.x += this.vx;
+      this.y += this.vy;
+      this.vx *= 0.995;
+      this.vy *= 0.995;
+      this.age += dt;
+    }
+    draw(ctx) {
+      const alpha = Math.max(0, 1 - this.age / this.life);
+      ctx.beginPath();
+      ctx.fillStyle = `hsla(${this.hue},90%,60%,${alpha})`;
+      ctx.arc(this.x, this.y, this.size,0,Math.PI*2);
+      ctx.fill();
+    }
+  }
+
+  // Helper: random pink color
+  function randomPink() {
+    // variety of pinks
+    const h = 330 + Math.random() * 20 - 10; // pink/red hue
+    const s = 70 + Math.random()*20;
+    const l = 55 + Math.random()*10;
+    return `hsl(${h},${s}%,${l}%)`;
+  }
+
+  // Device pixel ratio CSS separation
+  let DPR = window.devicePixelRatio || 1;
+  // For computing positions relative to CSS pixels (because we sample offscreen in CSS pixel space)
+  const DPR_CSS = 1; // we'll treat sampling positions in CSS px; main particle positions are in CSS px
+
+  // Initialize main particles
+  const mainParticles = [];
+  for (let i=0;i<MAIN_PARTICLE_COUNT;i++) mainParticles.push(new MainParticle());
+
+  // fireworks arrays
+  const rockets = [];
+  const explosions = [];
+
+  // timing helpers
+  let lastTime = performance.now();
+  let spawnAcc = 0;
+  let lastPhraseIndex = -1;
+  let phraseTimer = 0;
+  let started = false;
+  let phraseIndex = -1;
+
+  // Prepare initial heart points
+  function assignTargetsFromPoints(points, centerX, centerY, scale=1, colorFunc=null) {
+    // Assign each mainParticle a target from points (randomly or cycle)
+    // We'll map particles to points by shuffling indices
+    const pCount = points.length;
+    const mCount = mainParticles.length;
+    // choose sample of points equal to mCount (if points fewer, allow multiple particles per point)
+    const indices = [];
+    for (let i=0;i<mCount;i++) {
+      const idx = Math.floor(Math.random() * pCount);
+      indices.push(idx);
+    }
+    for (let i=0;i<mCount;i++) {
+      const pt = points[indices[i]];
+      const mp = mainParticles[i];
+      mp.tx = centerX + pt.x * scale;
+      mp.ty = centerY + pt.y * scale;
+      if (colorFunc) mp.color = colorFunc(i, pt);
+    }
+  }
+
+  // create heart sample points scaled to screen
+  function setHeartTargets() {
+    const minDim = Math.min(window.innerWidth, window.innerHeight);
+    // scale heart size based on min dimension
+    const sizePx = Math.floor(minDim * 0.8); // base heart area
+    const s = sampleHeartToPoints(sizePx, SAMPLE_GAP);
+    // choose scale to fit nicely
+    const scale = 1.0;
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    assignTargetsFromPoints(s.points, centerX, centerY, scale, () => randomPink());
+  }
+
+  // create text targets for a phrase
+  function setTextTargets(phrase) {
+    // determine font size based on screen width
+    const base = Math.min(window.innerWidth, window.innerHeight);
+    let fontSize = Math.floor(base * 0.18);
+    // If phrase length long reduce font
+    if (phrase.length > 6) fontSize = Math.floor(fontSize * 0.85);
+    // sample text
+    const sample = sampleTextToPoints(phrase, fontSize, 'Noto Sans SC, sans-serif', SAMPLE_GAP);
+    // center on screen: sample points are relative to off center, so add center position
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    // scale factor to mildly enlarge/shrink to fill
+    const scale = 1.0;
+    assignTargetsFromPoints(sample.points, centerX, centerY, scale, (i) => 'hsl(330,90%,70%)');
+  }
+
+  // initial: form heart immediately
+  setHeartTargets();
+
+  // resize handler to reassign targets when orientation changes (keeps layout)
+  let resizeTimeout = null;
+  window.addEventListener('resize', () => {
+    if (resizeTimeout) clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      setHeartTargets();
+      // if currently a phrase other than heart, re-render that phrase
+      if (phraseIndex >= 0) setTextTargets(phrases[phraseIndex]);
+    }, 250);
+  });
+
+  // spawn rocket periodically
+  let lastSpawn = performance.now();
+  function maybeSpawnRocket(dt) {
+    spawnAcc += dt;
+    // Poisson-like spawn
+    if (spawnAcc > FIREWORK_SPAWN_INTERVAL * (0.5 + Math.random()*1.2)) {
+      spawnAcc = 0;
+      const x = Math.random() * window.innerWidth * 0.9 + window.innerWidth*0.05;
+      const speed = ROCKET_MIN_SPEED + Math.random() * (ROCKET_MAX_SPEED - ROCKET_MIN_SPEED);
+      const hue = Math.floor(Math.random()*360);
+      rockets.push(new Rocket(x, speed, hue));
+    }
+  }
+
+  // main loop
+  function animate(now) {
+    const dt = Math.min(now - lastTime, 40);
+    lastTime = now;
+    // clear background (black)
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0,0,window.innerWidth, window.innerHeight);
+
+    // update and draw fireworks (rockets)
+    maybeSpawnRocket(dt);
+    for (let i = rockets.length - 1; i >= 0; i--) {
+      const r = rockets[i];
+      r.update(dt);
+      r.draw(ctx);
+      if (r.exploded) {
+        // spawn explosion particles
+        const exCount = 30 + Math.floor(Math.random()*60);
+        for (let k=0;k<exCount;k++) {
+          explosions.push(new ExplosionParticle(r.x, r.y, r.hue));
+        }
+        playBoom();
+        rockets.splice(i,1);
+      }
+    }
+    // update explosions
+    for (let i = explosions.length - 1; i >= 0; i--) {
+      const e = explosions[i];
+      e.update(dt);
+      if (e.age > e.life) explosions.splice(i,1);
+    }
+
+    // Draw explosions behind main particles? We can draw them first
+    for (let e of explosions) e.draw(ctx);
+
+    // Heart pulsing: compute scale
+    const t = now / 1000;
+    const pulse = 1 + Math.sin(t * Math.PI * 2 * HEART_PULSE_FREQ) * HEART_PULSE_AMPL;
+
+    // update main particles
+    // center coordinate
+    const cx = window.innerWidth/2;
+    const cy = window.innerHeight/2;
+    for (let p of mainParticles) {
+      // if current target is from heart (we can't directly know), but we'll apply pulse if targets close to center
+      // Instead, apply a small radial oscillation about target when in heart mode (approx by checking phraseIndex)
+      if (phraseIndex < 0) {
+        // heart mode: adjust target using pulse: move target relative to center
+        const dx = p.tx - cx;
+        const dy = p.ty - cy;
+        p.tx = cx + dx * pulse;
+        p.ty = cy + dy * pulse;
+      }
+      p.update(dt);
+      p.draw(ctx, 0, 0); // positions already absolute
+    }
+
+    // draw rockets on top
+    for (let r of rockets) r.draw(ctx);
+
+    // optionally draw faint glow / overlay
+    requestAnimationFrame(animate);
+  }
+
+  requestAnimationFrame(animate);
+
+  // set up phrase switching timeline
+  setTimeout(() => {
+    // start sequence
+    phraseIndex = 0;
+    setTextTargets(phrases[0]);
+    playChime();
+    // schedule subsequent changes
+    function nextPhrase() {
+      phraseIndex++;
+      if (phraseIndex >= phrases.length) {
+        phraseIndex = phrases.length - 1;
+        // keep last phrase
+        setTextTargets(phrases[phraseIndex]);
+        playChime();
+        return;
+      }
+      setTextTargets(phrases[phraseIndex]);
+      // explosion firework effect on switch
+      // spawn more explosions at center
+      const cx = window.innerWidth/2, cy = window.innerHeight/2;
+      for (let i=0;i<8;i++) {
+        const hue = Math.floor(Math.random()*360);
+        for (let k=0;k<30;k++) explosions.push(new ExplosionParticle(cx + (Math.random()-0.5)*100, cy + (Math.random()-0.5)*100, hue));
+      }
+      playChime();
+      // schedule next
+      setTimeout(nextPhrase, PHRASE_INTERVAL);
+    }
+    setTimeout(nextPhrase, PHRASE_INTERVAL);
+  }, SWITCH_DELAY);
+
+  // Make particles positions absolute (we previously used relative center coordinates in some assignments)
+  // We need to ensure that when assigning targets we used centerX/centerY in CSS pixels which are absolute.
+  // To ensure proper initial positions relative to canvas, convert mainParticles initial x,y that were centered earlier
+  // We'll correct initial offsets: we want particle positions to be absolute in CSS coordinates.
+  (function normalizeInitialPositions() {
+    // Reinitialize main particle positions to be somewhere around screen
+    for (let p of mainParticles) {
+      p.x = Math.random() * window.innerWidth;
+      p.y = Math.random() * window.innerHeight;
+      p.tx = p.x;
+      p.ty = p.y;
+    }
+  })();
+
+  // ---------- improvements: when sampling text/heart we used points with coordinates relative to center in CSS px.
+  // But assignTargetsFromPoints used centerX and added. That's OK.
+
+  // Touch/click to resume audio context (some browsers require interaction)
+  function resumeAudioOnInteraction() {
+    if (!audioCtx) return;
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+  }
+  document.addEventListener('touchstart', () => { ensureAudio(); resumeAudioOnInteraction(); }, {passive:true});
+  document.addEventListener('click', () => { ensureAudio(); resumeAudioOnInteraction(); }, {passive:true});
+
+  // Minor perf: reduce SAMPLE_GAP on small devices? Already set moderate.
+
+  // Small polish: When in heart mode we want main particles to be pinkish; after text also pink
+  // We'll update colors slightly on text switch by setting color in setTextTargets already.
+
+  // End of anonymous scope
+})();
+
+</script>
+</body>
+</html>

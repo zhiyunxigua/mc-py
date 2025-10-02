@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>初云杯测试指南 - 西瓜云</title>
+    <style>
+        :root {
+            --primary-color: #C7EBC7;
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --secondary-text: #666666;
+            --border-color: #e0e0e0;
+            --border-radius: 8px;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--primary-color);
+            padding: 15px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: var(--bg-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        h1 {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: var(--secondary-text);
+            font-size: 14px;
+        }
+
+        .card {
+            background-color: var(--bg-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            color: #2e7d32;
+        }
+
+        .card-title .icon {
+            margin-right: 10px;
+        }
+
+        .step {
+            margin-bottom: 20px;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 22px;
+            height: 22px;
+            background-color: #2e7d32;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 22px;
+            font-size: 12px;
+            margin-right: 8px;
+        }
+
+        .step-title {
+            font-weight: 500;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            background-color: #2e7d32;
+            color: white;
+            padding: 8px 15px;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            font-weight: 500;
+            margin: 8px 8px 8px 0;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .download-btn:hover {
+            background-color: #1b5e20;
+            transform: scale(1.02);
+        }
+
+        .download-btn .icon {
+            margin-right: 6px;
+        }
+
+        .account-list {
+            margin-top: 10px;
+        }
+
+        .account-item {
+            background-color: #f5f5f5;
+            border-radius: var(--border-radius);
+            padding: 12px;
+            margin-bottom: 10px;
+            position: relative;
+            transition: all 0.2s;
+            border: 1px solid var(--border-color);
+        }
+
+        .account-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .account-label {
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: #2e7d32;
+        }
+
+        .copyable {
+            padding: 6px 10px;
+            background-color: white;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            margin-right: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .copyable:hover {
+            background-color: #e8f5e9;
+        }
+
+        .copyable:active {
+            transform: scale(0.98);
+        }
+
+        .copyable::after {
+            content: "点击复制";
+            position: absolute;
+            right: -60px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            color: var(--secondary-text);
+            opacity: 0;
+            transition: opacity 0.2s;
+            white-space: nowrap;
+        }
+
+        .copyable:hover::after {
+            opacity: 1;
+        }
+
+        .copied-notice {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .show-notice {
+            opacity: 1;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            .card {
+                padding: 15px;
+            }
+
+            .card-title {
+                font-size: 16px;
+            }
+
+            .step-title {
+                font-size: 14px;
+            }
+
+            .download-btn {
+                font-size: 13px;
+                padding: 6px 12px;
+            }
+
+            .copyable {
+                font-size: 13px;
+                padding: 5px 8px;
+            }
+
+            .copyable::after {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>初云杯测试指南</h1>
+            <p class="subtitle">请按照以下步骤进行测试环境配置</p>
+            <a href="https://qm.qq.com/q/baEquo2ize" target="_blank" class="download-btn" onclick="copyLink(event, 'https://qm.qq.com/q/baEquo2ize')">
+                <span>加入QQ群聊</span>
+            </a>
+        </header>
+
+        <div class="card">
+            <div class="card-title">
+                <span class="icon">📱</span>
+                <span>手机端测试指南</span>
+            </div>
+
+            <div class="step">
+                <div>
+                    <span class="step-number">1</span>
+                    <span class="step-title">下载测试版MC</span>
+                </div>
+                <div style="margin-top: 10px;">
+                    <a href="https://g79.gdl.netease.com/dev_launcher_3.4.201.274956.apk?key1=c120705b0e645d77422238d4e7dc01ee&key2=68cce512" target="_blank" class="download-btn" onclick="copyLink(event, 'https://g79.gdl.netease.com/dev_launcher_3.4.201.274956.apk?key1=c120705b0e645d77422238d4e7dc01ee&key2=68cce512')">
+                        <span class="icon">⬇️</span>
+                        <span>安卓下载3.4</span>
+                    </a>
+                    <a href="https://g79.gdl.netease.com/dev_launcher_3.5.100.278638.apk?key1=8908d862bfd8d7b4f4492510d5dc2c5a&key2=68cce5a8" target="_blank" class="download-btn" onclick="copyLink(event, 'https://g79.gdl.netease.com/dev_launcher_3.5.100.278638.apk?key1=8908d862bfd8d7b4f4492510d5dc2c5a&key2=68cce5a8')">
+                        <span class="icon">⬇️</span>
+                        <span>安卓下载3.5</span>
+                    </a>
+                    <a href="https://testflight.apple.com/join/mOxZm1dD" target="_blank" class="download-btn" onclick="copyLink(event, 'https://testflight.apple.com/join/mOxZm1dD')">
+                        <span class="icon">⬇️</span>
+                        <span>苹果下载</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="step">
+                <div>
+                    <span class="step-number">2</span>
+                    <span class="step-title">登录测试账号</span>
+                </div>
+                <div class="account-list">
+                    <div class="account-item">
+                        <div class="account-label">初云测试号6</div>
+                        <div class="account-info">
+                            <span class="copyable" onclick="copyToClipboard('mahai61722@163.com')">邮箱: mahai61722@163.com</span>
+                            <span class="copyable" onclick="copyToClipboard('ningzao927')">密码: ningzao927</span>
+                        </div>
+                    </div>
+                    <div class="account-item">
+                        <div class="account-label">初云测试号7</div>
+                        <div class="account-info">
+                            <span class="copyable" onclick="copyToClipboard('mulao907@163.com')">邮箱: mulao907@163.com</span>
+                            <span class="copyable" onclick="copyToClipboard('tianny57465')">密码: tianny57465</span>
+                        </div>
+                    </div>
+                    <div class="account-item">
+                        <div class="account-label">初云测试号8</div>
+                        <div class="account-info">
+                            <span class="copyable" onclick="copyToClipboard('peishi79811@163.com')">邮箱: peishi79811@163.com</span>
+                            <span class="copyable" onclick="copyToClipboard('zhaihong4943')">密码: zhaihong4943</span>
+                        </div>
+                    </div>
+                    <div class="account-item">
+                        <div class="account-label">初云测试号9</div>
+                        <div class="account-info">
+                            <span class="copyable" onclick="copyToClipboard('gugaojing06668@163.com')">邮箱: gugaojing06668@163.com</span>
+                            <span class="copyable" onclick="copyToClipboard('a1234560')">密码: a1234560</span>
+                        </div>
+                    </div>
+                    <div class="account-item">
+                        <div class="account-label">初云测试号10</div>
+                        <div class="account-info">
+                            <span class="copyable" onclick="copyToClipboard('yunqian71256@163.com')">邮箱: yunqian71256@163.com</span>
+                            <span class="copyable" onclick="copyToClipboard('xiangbao332')">密码: xiangbao332</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <span class="step-title">打开网络游戏，选择"初云杯"</span>
+            </div>
+
+            <div class="step">
+                <span class="step-number">4</span>
+                <span class="step-title">使用"选择游戏"进入"生存之花"</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <span class="icon">💻</span>
+                <span>电脑端测试指南</span>
+            </div>
+
+            <div class="step">
+                <div>
+                    <span class="step-number">1</span>
+                    <span class="step-title">下载测试版MC</span>
+                </div>
+                <div style="margin-top: 10px;">
+                    <a href="https://adl.netease.com/d/g/mc/c/dev" target="_blank" class="download-btn" onclick="copyLink(event, 'https://adl.netease.com/d/g/mc/c/dev')">
+                        <span class="icon">⬇️</span>
+                        <span>Windows下载</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="step">
+                <div>
+                    <span class="step-number">2</span>
+                    <span class="step-title">登录测试账号(同上)</span>
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <span class="step-title">打开基岩版服务器标签页</span>
+            </div>
+
+            <div class="step">
+                <span class="step-number">4</span>
+                <span class="step-title">鼠标放到"初云杯服务器"上，选择"开发测试"</span>
+            </div>
+
+            <div class="step">
+                <span class="step-number">5</span>
+                <span class="step-title">右键"加入游戏"，选择"生存之花"</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="copied-notice" id="copiedNotice">已复制到剪贴板</div>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showNotice();
+            });
+        }
+
+        function copyLink(event, link) {
+            event.preventDefault();
+            navigator.clipboard.writeText(link).then(() => {
+                showNotice();
+                // 延迟跳转以确保复制完成
+                setTimeout(() => {
+                    window.open(link, '_blank');
+                }, 100);
+            });
+        }
+
+        function showNotice() {
+            const notice = document.getElementById('copiedNotice');
+            notice.classList.add('show-notice');
+            setTimeout(() => {
+                notice.classList.remove('show-notice');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
+
+
+

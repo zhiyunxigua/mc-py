@@ -2,412 +2,579 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>初云杯测试指南 - 西瓜云</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>粉色粒子爱心动画</title>
     <style>
-        :root {
-            --primary-color: #C7EBC7;
-            --bg-color: #ffffff;
-            --text-color: #333333;
-            --secondary-text: #666666;
-            --border-color: #e0e0e0;
-            --border-radius: 8px;
-            --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
-
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--primary-color);
-            padding: 15px;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 25px;
-            padding: 15px;
-            background-color: var(--bg-color);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-        }
-
-        h1 {
-            font-size: 22px;
-            font-weight: 600;
-            color: var(--text-color);
-            margin-bottom: 5px;
-        }
-
-        .subtitle {
-            color: var(--secondary-text);
-            font-size: 14px;
-        }
-
-        .card {
-            background-color: var(--bg-color);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow);
-        }
-
-        .card-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 15px;
+            background-color: #000;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
             display: flex;
+            justify-content: center;
             align-items: center;
-            color: #2e7d32;
+            font-family: 'Arial', sans-serif;
         }
-
-        .card-title .icon {
-            margin-right: 10px;
-        }
-
-        .step {
-            margin-bottom: 20px;
-        }
-
-        .step-number {
-            display: inline-block;
-            width: 22px;
-            height: 22px;
-            background-color: #2e7d32;
-            color: white;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 22px;
-            font-size: 12px;
-            margin-right: 8px;
-        }
-
-        .step-title {
-            font-weight: 500;
-            font-size: 16px;
-            margin-bottom: 10px;
-            display: inline-block;
-        }
-
-        .download-btn {
-            display: inline-flex;
-            align-items: center;
-            background-color: #2e7d32;
-            color: white;
-            padding: 8px 15px;
-            border-radius: var(--border-radius);
-            text-decoration: none;
-            font-weight: 500;
-            margin: 8px 8px 8px 0;
-            transition: all 0.2s;
-            font-size: 14px;
-        }
-
-        .download-btn:hover {
-            background-color: #1b5e20;
-            transform: scale(1.02);
-        }
-
-        .download-btn .icon {
-            margin-right: 6px;
-        }
-
-        .account-list {
-            margin-top: 10px;
-        }
-
-        .account-item {
-            background-color: #f5f5f5;
-            border-radius: var(--border-radius);
-            padding: 12px;
-            margin-bottom: 10px;
-            position: relative;
-            transition: all 0.2s;
-            border: 1px solid var(--border-color);
-        }
-
-        .account-info {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .account-label {
-            font-weight: 500;
-            margin-bottom: 5px;
-            color: #2e7d32;
-        }
-
-        .copyable {
-            padding: 6px 10px;
-            background-color: white;
-            border-radius: 4px;
-            border: 1px solid var(--border-color);
-            margin-right: 8px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-            font-size: 14px;
-            display: inline-flex;
-            align-items: center;
-        }
-
-        .copyable:hover {
-            background-color: #e8f5e9;
-        }
-
-        .copyable:active {
-            transform: scale(0.98);
-        }
-
-        .copyable::after {
-            content: "点击复制";
+        
+        canvas {
             position: absolute;
-            right: -60px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 12px;
-            color: var(--secondary-text);
-            opacity: 0;
-            transition: opacity 0.2s;
-            white-space: nowrap;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
         }
-
-        .copyable:hover::after {
-            opacity: 1;
-        }
-
-        .copied-notice {
-            position: fixed;
+        
+        .controls {
+            position: absolute;
             bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(0, 0, 0, 0.7);
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            z-index: 10;
+        }
+        
+        button {
+            background: rgba(255, 182, 193, 0.7);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
             color: white;
-            padding: 8px 16px;
-            border-radius: var(--border-radius);
             font-size: 14px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: 100;
-            pointer-events: none;
+            cursor: pointer;
+            transition: all 0.3s;
         }
-
-        .show-notice {
-            opacity: 1;
+        
+        button:hover {
+            background: rgba(255, 182, 193, 0.9);
+            transform: scale(1.05);
         }
-
-        @media (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
-
-            .card {
-                padding: 15px;
-            }
-
-            .card-title {
-                font-size: 16px;
-            }
-
-            .step-title {
-                font-size: 14px;
-            }
-
-            .download-btn {
-                font-size: 13px;
-                padding: 6px 12px;
-            }
-
-            .copyable {
-                font-size: 13px;
-                padding: 5px 8px;
-            }
-
-            .copyable::after {
-                display: none;
-            }
+        
+        .info {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            z-index: 10;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>初云杯测试指南</h1>
-            <p class="subtitle">请按照以下步骤进行测试环境配置</p>
-            <a href="https://qm.qq.com/q/baEquo2ize" target="_blank" class="download-btn" onclick="copyLink(event, 'https://qm.qq.com/q/baEquo2ize')">
-                <span>加入QQ群聊</span>
-            </a>
-        </header>
-
-        <div class="card">
-            <div class="card-title">
-                <span class="icon">📱</span>
-                <span>手机端测试指南</span>
-            </div>
-
-            <div class="step">
-                <div>
-                    <span class="step-number">1</span>
-                    <span class="step-title">下载测试版MC</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <a href="https://g79.gdl.netease.com/dev_launcher_3.4.201.274956.apk?key1=c120705b0e645d77422238d4e7dc01ee&key2=68cce512" target="_blank" class="download-btn" onclick="copyLink(event, 'https://g79.gdl.netease.com/dev_launcher_3.4.201.274956.apk?key1=c120705b0e645d77422238d4e7dc01ee&key2=68cce512')">
-                        <span class="icon">⬇️</span>
-                        <span>安卓下载3.4</span>
-                    </a>
-                    <a href="https://g79.gdl.netease.com/dev_launcher_3.5.100.278638.apk?key1=8908d862bfd8d7b4f4492510d5dc2c5a&key2=68cce5a8" target="_blank" class="download-btn" onclick="copyLink(event, 'https://g79.gdl.netease.com/dev_launcher_3.5.100.278638.apk?key1=8908d862bfd8d7b4f4492510d5dc2c5a&key2=68cce5a8')">
-                        <span class="icon">⬇️</span>
-                        <span>安卓下载3.5</span>
-                    </a>
-                    <a href="https://testflight.apple.com/join/mOxZm1dD" target="_blank" class="download-btn" onclick="copyLink(event, 'https://testflight.apple.com/join/mOxZm1dD')">
-                        <span class="icon">⬇️</span>
-                        <span>苹果下载</span>
-                    </a>
-                </div>
-            </div>
-
-            <div class="step">
-                <div>
-                    <span class="step-number">2</span>
-                    <span class="step-title">登录测试账号</span>
-                </div>
-                <div class="account-list">
-                    <div class="account-item">
-                        <div class="account-label">初云测试号6</div>
-                        <div class="account-info">
-                            <span class="copyable" onclick="copyToClipboard('mahai61722@163.com')">邮箱: mahai61722@163.com</span>
-                            <span class="copyable" onclick="copyToClipboard('ningzao927')">密码: ningzao927</span>
-                        </div>
-                    </div>
-                    <div class="account-item">
-                        <div class="account-label">初云测试号7</div>
-                        <div class="account-info">
-                            <span class="copyable" onclick="copyToClipboard('mulao907@163.com')">邮箱: mulao907@163.com</span>
-                            <span class="copyable" onclick="copyToClipboard('tianny57465')">密码: tianny57465</span>
-                        </div>
-                    </div>
-                    <div class="account-item">
-                        <div class="account-label">初云测试号8</div>
-                        <div class="account-info">
-                            <span class="copyable" onclick="copyToClipboard('peishi79811@163.com')">邮箱: peishi79811@163.com</span>
-                            <span class="copyable" onclick="copyToClipboard('zhaihong4943')">密码: zhaihong4943</span>
-                        </div>
-                    </div>
-                    <div class="account-item">
-                        <div class="account-label">初云测试号9</div>
-                        <div class="account-info">
-                            <span class="copyable" onclick="copyToClipboard('gugaojing06668@163.com')">邮箱: gugaojing06668@163.com</span>
-                            <span class="copyable" onclick="copyToClipboard('a1234560')">密码: a1234560</span>
-                        </div>
-                    </div>
-                    <div class="account-item">
-                        <div class="account-label">初云测试号10</div>
-                        <div class="account-info">
-                            <span class="copyable" onclick="copyToClipboard('yunqian71256@163.com')">邮箱: yunqian71256@163.com</span>
-                            <span class="copyable" onclick="copyToClipboard('xiangbao332')">密码: xiangbao332</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="step">
-                <span class="step-number">3</span>
-                <span class="step-title">打开网络游戏，选择"初云杯"</span>
-            </div>
-
-            <div class="step">
-                <span class="step-number">4</span>
-                <span class="step-title">使用"选择游戏"进入"生存之花"</span>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-title">
-                <span class="icon">💻</span>
-                <span>电脑端测试指南</span>
-            </div>
-
-            <div class="step">
-                <div>
-                    <span class="step-number">1</span>
-                    <span class="step-title">下载测试版MC</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <a href="https://adl.netease.com/d/g/mc/c/dev" target="_blank" class="download-btn" onclick="copyLink(event, 'https://adl.netease.com/d/g/mc/c/dev')">
-                        <span class="icon">⬇️</span>
-                        <span>Windows下载</span>
-                    </a>
-                </div>
-            </div>
-
-            <div class="step">
-                <div>
-                    <span class="step-number">2</span>
-                    <span class="step-title">登录测试账号(同上)</span>
-                </div>
-            </div>
-
-            <div class="step">
-                <span class="step-number">3</span>
-                <span class="step-title">打开基岩版服务器标签页</span>
-            </div>
-
-            <div class="step">
-                <span class="step-number">4</span>
-                <span class="step-title">鼠标放到"初云杯服务器"上，选择"开发测试"</span>
-            </div>
-
-            <div class="step">
-                <span class="step-number">5</span>
-                <span class="step-title">右键"加入游戏"，选择"生存之花"</span>
-            </div>
-        </div>
+    <canvas id="canvas"></canvas>
+    
+    <div class="info">
+        粉色粒子跳动爱心动画
+    </div>
+    
+    <div class="controls">
+        <button id="toggleMusic">音效: 开</button>
+        <button id="restart">重新开始</button>
     </div>
 
-    <div class="copied-notice" id="copiedNotice">已复制到剪贴板</div>
-
     <script>
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                showNotice();
-            });
+        // 获取Canvas元素
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // 设置Canvas尺寸为窗口大小
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        // 粒子类
+        class Particle {
+            constructor(x, y, color, size, speedX, speedY) {
+                this.x = x;
+                this.y = y;
+                this.originX = x;
+                this.originY = y;
+                this.color = color;
+                this.size = size;
+                this.speedX = speedX || 0;
+                this.speedY = speedY || 0;
+                this.friction = 0.95;
+                this.ease = 0.1;
+                this.targetX = x;
+                this.targetY = y;
+            }
+            
+            update() {
+                // 粒子位置更新
+                this.x += (this.targetX - this.x) * this.ease + this.speedX;
+                this.y += (this.targetY - this.y) * this.ease + this.speedY;
+                
+                // 粒子运动速度衰减
+                this.speedX *= this.friction;
+                this.speedY *= this.friction;
+                
+                // 粒子尺寸轻微变化
+                this.size = Math.max(0, this.size);
+            }
+            
+            draw() {
+                ctx.beginPath();
+                ctx.fillStyle = this.color;
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
         }
-
-        function copyLink(event, link) {
-            event.preventDefault();
-            navigator.clipboard.writeText(link).then(() => {
-                showNotice();
-                // 延迟跳转以确保复制完成
+        
+        // 烟花粒子类
+        class FireworkParticle extends Particle {
+            constructor(x, y, color) {
+                const size = Math.random() * 2 + 1;
+                const speedX = (Math.random() - 0.5) * 8;
+                const speedY = (Math.random() - 0.5) * 8;
+                super(x, y, color, size, speedX, speedY);
+                this.alpha = 1;
+                this.decay = Math.random() * 0.02 + 0.01;
+            }
+            
+            update() {
+                super.update();
+                this.alpha -= this.decay;
+                this.size *= 0.99;
+            }
+            
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                super.draw();
+                ctx.restore();
+            }
+            
+            isDead() {
+                return this.alpha <= 0 || this.size <= 0.1;
+            }
+        }
+        
+        // 烟花类
+        class Firework {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height;
+                this.targetY = canvas.height * 0.3 + Math.random() * canvas.height * 0.3;
+                this.speed = 3 + Math.random() * 2;
+                this.color = `hsl(${Math.random() * 60 + 300}, 100%, 60%)`;
+                this.particles = [];
+                this.exploded = false;
+            }
+            
+            update() {
+                if (!this.exploded) {
+                    this.y -= this.speed;
+                    
+                    if (this.y <= this.targetY) {
+                        this.explode();
+                    }
+                } else {
+                    // 更新爆炸粒子
+                    this.particles.forEach((particle, index) => {
+                        particle.update();
+                        if (particle.isDead()) {
+                            this.particles.splice(index, 1);
+                        }
+                    });
+                }
+            }
+            
+            explode() {
+                this.exploded = true;
+                const particleCount = 50 + Math.floor(Math.random() * 50);
+                
+                for (let i = 0; i < particleCount; i++) {
+                    this.particles.push(new FireworkParticle(this.x, this.y, this.color));
+                }
+                
+                // 播放爆炸音效
+                if (musicEnabled) {
+                    playExplosionSound();
+                }
+            }
+            
+            draw() {
+                if (!this.exploded) {
+                    ctx.beginPath();
+                    ctx.fillStyle = this.color;
+                    ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+                    ctx.fill();
+                } else {
+                    this.particles.forEach(particle => particle.draw());
+                }
+            }
+            
+            isDead() {
+                return this.exploded && this.particles.length === 0;
+            }
+        }
+        
+        // 文字粒子系统
+        class TextParticleSystem {
+            constructor() {
+                this.particles = [];
+                this.text = "";
+                this.textIndex = 0;
+                this.texts = [
+                    "云云爱你哟❤",
+                    "愿你永远开心",
+                    "幸福常伴你左右",
+                    "健康快乐每一天",
+                    "梦想成真",
+                    "我会永远陪着你❤"
+                ];
+                this.changeTextTimeout = null;
+                this.isChanging = false;
+            }
+            
+            init(text) {
+                this.text = text;
+                this.particles = [];
+                
+                // 创建文字粒子
+                const fontSize = Math.min(canvas.width * 0.08, 80);
+                ctx.font = `bold ${fontSize}px Arial`;
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                
+                const textWidth = ctx.measureText(text).width;
+                const x = canvas.width / 2;
+                const y = canvas.height / 2;
+                
+                // 获取文字像素数据
+                const tempCanvas = document.createElement('canvas');
+                const tempCtx = tempCanvas.getContext('2d');
+                tempCanvas.width = textWidth + 20;
+                tempCanvas.height = fontSize + 20;
+                tempCtx.font = `bold ${fontSize}px Arial`;
+                tempCtx.textAlign = "center";
+                tempCtx.textBaseline = "middle";
+                tempCtx.fillStyle = "white";
+                tempCtx.fillText(text, tempCanvas.width / 2, tempCanvas.height / 2);
+                
+                const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
+                const data = imageData.data;
+                
+                // 创建粒子
+                const particleSize = 2;
+                const gap = 3;
+                
+                for (let i = 0; i < tempCanvas.width; i += gap) {
+                    for (let j = 0; j < tempCanvas.height; j += gap) {
+                        const index = (j * tempCanvas.width + i) * 4;
+                        if (data[index + 3] > 128) { // 如果像素不透明
+                            const px = x - textWidth / 2 + i;
+                            const py = y - fontSize / 2 + j;
+                            
+                            // 随机起始位置
+                            const startX = Math.random() * canvas.width;
+                            const startY = Math.random() * canvas.height;
+                            
+                            this.particles.push(new Particle(
+                                startX, 
+                                startY, 
+                                `rgba(255, ${Math.floor(Math.random() * 100 + 155)}, ${Math.floor(Math.random() * 100 + 155)}, 1)`,
+                                particleSize
+                            ));
+                            
+                            // 设置目标位置
+                            this.particles[this.particles.length - 1].targetX = px;
+                            this.particles[this.particles.length - 1].targetY = py;
+                        }
+                    }
+                }
+            }
+            
+            update() {
+                this.particles.forEach(particle => {
+                    particle.update();
+                });
+            }
+            
+            draw() {
+                this.particles.forEach(particle => {
+                    particle.draw();
+                });
+            }
+            
+            changeText() {
+                if (this.isChanging) return;
+                
+                this.isChanging = true;
+                
+                // 为所有粒子设置随机目标位置
+                this.particles.forEach(particle => {
+                    particle.targetX = Math.random() * canvas.width;
+                    particle.targetY = Math.random() * canvas.height;
+                });
+                
+                // 延迟后设置新文字
                 setTimeout(() => {
-                    window.open(link, '_blank');
-                }, 100);
+                    this.textIndex = (this.textIndex + 1) % this.texts.length;
+                    this.init(this.texts[this.textIndex]);
+                    this.isChanging = false;
+                    
+                    // 播放文字切换音效
+                    if (musicEnabled) {
+                        playTextChangeSound();
+                    }
+                }, 1000);
+            }
+            
+            startTextCycle() {
+                // 5秒后开始显示文字
+                setTimeout(() => {
+                    this.init(this.texts[this.textIndex]);
+                    
+                    // 播放文字出现音效
+                    if (musicEnabled) {
+                        playTextAppearSound();
+                    }
+                    
+                    // 设置文字切换间隔
+                    this.changeTextTimeout = setInterval(() => {
+                        this.changeText();
+                    }, 4000);
+                }, 5000);
+            }
+            
+            stopTextCycle() {
+                if (this.changeTextTimeout) {
+                    clearInterval(this.changeTextTimeout);
+                }
+            }
+        }
+        
+        // 爱心粒子系统
+        class HeartParticleSystem {
+            constructor() {
+                this.particles = [];
+                this.beatDirection = 1;
+                this.beatSize = 1;
+                this.beatSpeed = 0.005;
+                this.maxBeatSize = 1.2;
+                this.minBeatSize = 0.9;
+            }
+            
+            init() {
+                this.particles = [];
+                const heartSize = Math.min(canvas.width, canvas.height) * 0.2;
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+                const particleCount = 500;
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const radius = Math.random() * heartSize;
+                    
+                    // 爱心参数方程
+                    const t = angle;
+                    const x = 16 * Math.pow(Math.sin(t), 3);
+                    const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+                    
+                    // 缩放和定位
+                    const scale = heartSize / 20;
+                    const px = centerX + x * scale;
+                    const py = centerY + y * scale;
+                    
+                    // 随机起始位置
+                    const startX = Math.random() * canvas.width;
+                    const startY = Math.random() * canvas.height;
+                    
+                    this.particles.push(new Particle(
+                        startX, 
+                        startY, 
+                        `rgba(255, ${Math.floor(Math.random() * 100 + 100)}, ${Math.floor(Math.random() * 100 + 155)}, 1)`,
+                        Math.random() * 2 + 1
+                    ));
+                    
+                    // 设置目标位置
+                    this.particles[this.particles.length - 1].targetX = px;
+                    this.particles[this.particles.length - 1].targetY = py;
+                }
+            }
+            
+            update() {
+                // 更新心跳效果
+                this.beatSize += this.beatSpeed * this.beatDirection;
+                
+                if (this.beatSize > this.maxBeatSize) {
+                    this.beatSize = this.maxBeatSize;
+                    this.beatDirection = -1;
+                } else if (this.beatSize < this.minBeatSize) {
+                    this.beatSize = this.minBeatSize;
+                    this.beatDirection = 1;
+                }
+                
+                // 更新粒子位置
+                this.particles.forEach(particle => {
+                    particle.update();
+                    
+                    // 应用心跳效果
+                    const dx = particle.x - canvas.width / 2;
+                    const dy = particle.y - canvas.height / 2;
+                    
+                    particle.targetX = canvas.width / 2 + dx * this.beatSize;
+                    particle.targetY = canvas.height / 2 + dy * this.beatSize;
+                });
+            }
+            
+            draw() {
+                this.particles.forEach(particle => {
+                    particle.draw();
+                });
+            }
+        }
+        
+        // 音频上下文和音效
+        let audioContext;
+        let musicEnabled = true;
+        
+        function initAudio() {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            } catch (e) {
+                console.log("Web Audio API is not supported in this browser");
+                musicEnabled = false;
+                document.getElementById('toggleMusic').textContent = "音效: 不支持";
+            }
+        }
+        
+        function playExplosionSound() {
+            if (!audioContext) return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(50, audioContext.currentTime + 0.5);
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.5);
+        }
+        
+        function playTextAppearSound() {
+            if (!audioContext) return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
+            oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1); // E5
+            oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2); // G5
+            
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.05);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.5);
+        }
+        
+        function playTextChangeSound() {
+            if (!audioContext) return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(392, audioContext.currentTime); // G4
+            oscillator.frequency.setValueAtTime(493.88, audioContext.currentTime + 0.1); // B4
+            oscillator.frequency.setValueAtTime(587.33, audioContext.currentTime + 0.2); // D5
+            
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.2, audioContext.currentTime + 0.05);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.4);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.4);
+        }
+        
+        // 初始化系统
+        const heartSystem = new HeartParticleSystem();
+        const textSystem = new TextParticleSystem();
+        const fireworks = [];
+        
+        function init() {
+            heartSystem.init();
+            textSystem.startTextCycle();
+        }
+        
+        // 动画循环
+        function animate() {
+            // 清除画布
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // 更新和绘制爱心
+            heartSystem.update();
+            heartSystem.draw();
+            
+            // 更新和绘制文字
+            textSystem.update();
+            textSystem.draw();
+            
+            // 更新和绘制烟花
+            if (Math.random() < 0.05) {
+                fireworks.push(new Firework());
+            }
+            
+            fireworks.forEach((firework, index) => {
+                firework.update();
+                firework.draw();
+                
+                if (firework.isDead()) {
+                    fireworks.splice(index, 1);
+                }
             });
+            
+            requestAnimationFrame(animate);
         }
-
-        function showNotice() {
-            const notice = document.getElementById('copiedNotice');
-            notice.classList.add('show-notice');
-            setTimeout(() => {
-                notice.classList.remove('show-notice');
-            }, 2000);
-        }
+        
+        // 窗口大小调整
+        window.addEventListener('resize', function() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            heartSystem.init();
+        });
+        
+        // 控制按钮
+        document.getElementById('toggleMusic').addEventListener('click', function() {
+            musicEnabled = !musicEnabled;
+            this.textContent = `音效: ${musicEnabled ? '开' : '关'}`;
+        });
+        
+        document.getElementById('restart').addEventListener('click', function() {
+            textSystem.stopTextCycle();
+            textSystem.textIndex = 0;
+            textSystem.startTextCycle();
+        });
+        
+        // 启动动画
+        initAudio();
+        init();
+        animate();
     </script>
 </body>
 </html>
-
-
-
