@@ -87,41 +87,83 @@
         let animationStarted = false;
         let bgMusic = document.getElementById('bgMusic');
         let audioControl = document.querySelector('.audio-control');
-        let audioContext;
         
-        // 初始化音频
-        function initAudio() {
-            try {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            } catch (e) {
-                console.log("Web Audio API is not supported in this browser");
+        // 烟花声音管理器
+        const soundManager = {
+            baseURL: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/329180/',
+            ctx: new (window.AudioContext || window.webkitAudioContext),
+            sources: {
+                lift: {
+                    volume: 1,
+                    playbackRateMin: 0.85,
+                    playbackRateMax: 0.95,
+                    fileNames: [
+                        'lift1.mp3',
+                        'lift2.mp3',
+                        'lift3.mp3'
+                    ]
+                },
+                burst: {
+                    volume: 1,
+                    playbackRateMin: 0.8,
+                    playbackRateMax: 0.9,
+                    fileNames: [
+                        'burst1.mp3',
+                        'burst2.mp3'
+                    ]
+                },
+                burstSmall: {
+                    volume: 0.25,
+                    playbackRateMin: 0.8,
+                    playbackRateMax: 1,
+                    fileNames: [
+                        'burst-sm-1.mp3',
+                        'burst-sm-2.mp3'
+                    ]
+                },
+                crackle: {
+                    volume: 0.2,
+                    playbackRateMin: 1,
+                    playbackRateMax: 1,
+                    fileNames: ['crackle1.mp3']
+                },
+                crackleSmall: {
+                    volume: 0.3,
+                    playbackRateMin: 1,
+                    playbackRateMax: 1,
+                    fileNames: ['crackle-sm-1.mp3']
+                }
+            },
+
+            // 播放声音的函数
+            playSound(type, scale=1) {
+                const source = this.sources[type];
+                if (!source) return;
+                const fileName = source.fileNames[Math.floor(Math.random()*source.fileNames.length)];
+                const url = this.baseURL + fileName;
+
+                // 加载并播放
+                fetch(url)
+                    .then(resp => resp.arrayBuffer())
+                    .then(data => this.ctx.decodeAudioData(data))
+                    .then(buffer => {
+                        const bufferSource = this.ctx.createBufferSource();
+                        bufferSource.buffer = buffer;
+
+                        // 播放速度（带随机性）
+                        const initialPlaybackRate = source.playbackRateMin + Math.random()*(source.playbackRateMax-source.playbackRateMin);
+                        const scaledPlaybackRate = initialPlaybackRate * (2 - scale);
+                        bufferSource.playbackRate.value = scaledPlaybackRate;
+
+                        // 音量控制
+                        const gainNode = this.ctx.createGain();
+                        gainNode.gain.value = source.volume * scale;
+
+                        bufferSource.connect(gainNode).connect(this.ctx.destination);
+                        bufferSource.start(0);
+                    });
             }
-        }
-        
-        // 烟花爆炸音效
-        function playFireworkSound() {
-            if (!audioContext) return;
-            
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.type = 'sine';
-            
-            // 模拟烟花爆炸声
-            oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
-            oscillator.frequency.setValueAtTime(150, audioContext.currentTime + 0.1);
-            oscillator.frequency.setValueAtTime(100, audioContext.currentTime + 0.2);
-            
-            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-            gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.05);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.5);
-        }
+        };
         
         // 启动动画
         function startAnimation() {
@@ -135,9 +177,6 @@
             bgMusic.play().catch(e => {
                 console.log("自动播放被阻止，需要用户交互");
             });
-            
-            // 初始化音频（在用户交互后）
-            initAudio();
             
             // 立即启动烟花背景
             startFireworks();
@@ -261,7 +300,7 @@
                     this.exploded = true;
                     
                     // 播放烟花爆炸音效
-                    playFireworkSound();
+                    soundManager.playSound('burst', 1);
                     
                     const particleCount = 70 + Math.floor(Math.random() * 100);
                     
@@ -645,9 +684,9 @@
                     this.text = text;
                     this.particles = [];
                     
-                    // 减小字体大小和粗细
-                    const fontSize = Math.min(canvas.width * 0.06, 60); // 从0.08减小到0.06
-                    ctx.font = `normal ${fontSize}px Arial`; // 从bold改为normal
+                    // 增加字体大小 - 放大两倍
+                    const fontSize = Math.min(canvas.width * 0.12, 120); // 从0.06增加到0.12，放大两倍
+                    ctx.font = `normal ${fontSize}px Arial`;
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
                     
@@ -660,7 +699,7 @@
                     const tempCtx = tempCanvas.getContext('2d');
                     tempCanvas.width = textWidth + 20;
                     tempCanvas.height = fontSize + 20;
-                    tempCtx.font = `normal ${fontSize}px Arial`; // 从bold改为normal
+                    tempCtx.font = `normal ${fontSize}px Arial`;
                     tempCtx.textAlign = "center";
                     tempCtx.textBaseline = "middle";
                     tempCtx.fillStyle = "white";
@@ -669,9 +708,9 @@
                     const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
                     const data = imageData.data;
                     
-                    // 减少粒子数量和大小，让文字更细
-                    const particleSize = 1.0; // 从1.5减小到1.0
-                    const gap = 3; // 从2增加到3，减少粒子密度
+                    // 增加粒子数量 - 减小粒子间距
+                    const particleSize = 1.5; // 稍微增加粒子大小
+                    const gap = 2; // 从3减小到2，增加粒子密度
                     
                     for (let i = 0; i < tempCanvas.width; i += gap) {
                         for (let j = 0; j < tempCanvas.height; j += gap) {
@@ -691,7 +730,7 @@
                                     startX, 
                                     startY, 
                                     `hsl(${hue}, ${saturation}%, ${lightness}%)`,
-                                    particleSize + Math.random() * 0.8 // 从1.5减小到0.8
+                                    particleSize + Math.random() * 1.0 // 稍微增加粒子大小变化范围
                                 ));
                                 
                                 this.particles[this.particles.length - 1].targetX = px;
@@ -700,8 +739,8 @@
                         }
                     }
                     
-                    // 减少额外粒子数量
-                    const extraParticles = 200; // 从500减少到200
+                    // 大幅增加额外粒子数量
+                    const extraParticles = 800; // 从200增加到800
                     for (let i = 0; i < extraParticles; i++) {
                         const px = x - textWidth / 2 + Math.random() * textWidth;
                         const py = y - fontSize / 2 + Math.random() * fontSize;
@@ -717,7 +756,7 @@
                             startX, 
                             startY, 
                             `hsl(${hue}, ${saturation}%, ${lightness}%)`,
-                            particleSize * 0.5 + Math.random() * 0.5 // 从1减小到0.5
+                            particleSize * 0.8 + Math.random() * 0.7 // 稍微增加粒子大小
                         ));
                         
                         this.particles[this.particles.length - 1].targetX = px;
