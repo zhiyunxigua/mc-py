@@ -215,15 +215,6 @@
             if (animationStarted) return;
             animationStarted = true;
             
-            // 进入全屏
-            const element = document.documentElement;
-            if (element.requestFullscreen) {
-                element.requestFullscreen();
-            } else if (element.webkitRequestFullscreen) {
-                element.webkitRequestFullscreen();
-            } else if (element.msRequestFullscreen) {
-                element.msRequestFullscreen();
-            }
 
             // 隐藏开始消息
             document.querySelector('.start-message').style.display = 'none';
@@ -729,7 +720,7 @@
                     this.text = text;
                     this.particles = [];
                     
-                    const fontSize = Math.min(canvas.width * 0.15, 120); // 文本大小
+                    const fontSize = Math.min(canvas.width * 0.12, 120); // 文本大小
                     ctx.font = `normal ${fontSize}px Arial`;
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
