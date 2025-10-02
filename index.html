@@ -70,11 +70,33 @@
             cursor: pointer;
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
+
+        .typewriter-text {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #fff;
+            font-size: 12px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            pointer-events: none;
+            max-width: 90%;
+            z-index: 2;
+            text-shadow: 
+                0 0 1px #ff69b4,
+                0 0 2px #ff69b4,
+                0 0 3px #ff69b4,
+                0 0 4px #fff,
+                0 0 8px #fff,
+                0 0 12px ;
+        }
+
     </style>
 </head>
 <body>
     <div class="start-message">点击屏幕开始</div>
-    <div class="audio-control">🔊 音乐控制</div>
+    <div id="typewriterContainer" class="typewriter-text">
+    </div>
     <canvas id="fireworksCanvas"></canvas>
     <canvas id="heartCanvas"></canvas>
     <canvas id="textCanvas"></canvas>
@@ -87,8 +109,30 @@
         // 全局变量
         let animationStarted = false;
         let bgMusic = document.getElementById('bgMusic');
-        let audioControl = document.querySelector('.audio-control');
         
+        // 显示自定义文字
+        function startTypewriter() {
+            const container = document.getElementById('typewriterContainer');
+            const fullText = `亲爱的老婆大人
+  你即将成为
+  全世界
+  最幸福
+  的妻子`;
+            
+            let index = 0;
+            container.innerHTML = '';
+            
+            function typeCharacter() {
+                if (index < fullText.length) {
+                    container.innerHTML += fullText.charAt(index);
+                    index++;
+                    setTimeout(typeCharacter, 500); // 调整速度：数值越小越快
+                }
+            }
+            
+            typeCharacter();
+        }
+
         // 烟花声音管理器
         const soundManager = {
             baseURL: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/329180/',
@@ -189,17 +233,6 @@
         // 点击页面开始动画
         document.addEventListener('click', startAnimation);
         document.addEventListener('touchstart', startAnimation);
-        
-        // 音乐控制
-        audioControl.addEventListener('click', function() {
-            if (bgMusic.paused) {
-                bgMusic.play();
-                this.innerHTML = '🔊 音乐开启';
-            } else {
-                bgMusic.pause();
-                this.innerHTML = '🔈 音乐关闭';
-            }
-        });
         
         // 烟花背景效果
         function startFireworks() {
@@ -598,6 +631,7 @@
             // 5秒后开始淡出爱心并启动文本动画
             setTimeout(() => {
                 fadeHeart();
+                startTypewriter(); // 开始打字机效果
                 startTextAnimation();
             }, 5000);
             
@@ -661,7 +695,7 @@
                     this.text = "";
                     this.textIndex = 0;
                     this.texts = [
-                        "云云爱你哟❤",
+                        "爱你哟❤",
                         "❤我会永远陪着你",
                         "愿你永远开心",
                         "幸福常伴你左右",
@@ -685,8 +719,7 @@
                     this.text = text;
                     this.particles = [];
                     
-                    // 增加字体大小 - 放大两倍
-                    const fontSize = Math.min(canvas.width * 0.12, 120); // 从0.06增加到0.12，放大两倍
+                    const fontSize = Math.min(canvas.width * 0.15, 120); // 文本大小
                     ctx.font = `normal ${fontSize}px Arial`;
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
@@ -710,8 +743,8 @@
                     const data = imageData.data;
                     
                     // 增加粒子数量 - 减小粒子间距
-                    const particleSize = 1.5; // 稍微增加粒子大小
-                    const gap = 2; // 从3减小到2，增加粒子密度
+                    const particleSize = 1.5; // 粒子大小
+                    const gap = 2; // 粒子密度
                     
                     for (let i = 0; i < tempCanvas.width; i += gap) {
                         for (let j = 0; j < tempCanvas.height; j += gap) {
@@ -731,7 +764,7 @@
                                     startX, 
                                     startY, 
                                     `hsl(${hue}, ${saturation}%, ${lightness}%)`,
-                                    particleSize + Math.random() * 1.0 // 稍微增加粒子大小变化范围
+                                    particleSize + Math.random() * 1.0 // 粒子大小变化范围
                                 ));
                                 
                                 this.particles[this.particles.length - 1].targetX = px;
@@ -740,8 +773,8 @@
                         }
                     }
                     
-                    // 大幅增加额外粒子数量
-                    const extraParticles = 800; // 从200增加到800
+                    // 粒子数量
+                    const extraParticles = 800; // 800
                     for (let i = 0; i < extraParticles; i++) {
                         const px = x - textWidth / 2 + Math.random() * textWidth;
                         const py = y - fontSize / 2 + Math.random() * fontSize;
@@ -757,7 +790,7 @@
                             startX, 
                             startY, 
                             `hsl(${hue}, ${saturation}%, ${lightness}%)`,
-                            particleSize * 0.8 + Math.random() * 0.7 // 稍微增加粒子大小
+                            particleSize * 0.8 + Math.random() * 0.7 // 粒子大小
                         ));
                         
                         this.particles[this.particles.length - 1].targetX = px;
@@ -814,7 +847,6 @@
             
             // 动画循环
             function animate() {
-                // 关键修复：使用完全透明的清除，不覆盖烟花
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
                 // 更新和绘制文字
