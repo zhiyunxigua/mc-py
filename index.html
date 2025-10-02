@@ -11,8 +11,15 @@
             padding: 0;
             box-sizing: border-box;
         }
-
-        body {
+        html, body {
+            touch-action: manipulation;
+            -ms-touch-action: manipulation;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
             background-color: #000;
             overflow: hidden;
             width: 100vw;
@@ -94,7 +101,7 @@
 
     </style>
 </head>
-<body>
+<body ontouchstart="">
     <div class="start-message">点击屏幕开始</div>
     <div id="typewriterContainer" class="typewriter-text">
     </div>
@@ -110,7 +117,32 @@
         // 全局变量
         let animationStarted = false;
         let bgMusic = document.getElementById('bgMusic');
-        
+        // 禁用 Ctrl+滚轮缩放
+        document.addEventListener('wheel', function(e) {
+            if (e.ctrlKey) {
+                e.preventDefault();
+                return false;
+            }
+        }, { passive: false });
+
+        // 禁用键盘缩放 (Ctrl+ +/-)
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && (e.key === '+' || e.key === '-' || e.key === '=')) {
+                e.preventDefault();
+                return false;
+            }
+        });
+        // 禁用双指手势
+        document.addEventListener('gesturestart', function(e) {
+            e.preventDefault();
+        });
+        document.addEventListener('gesturechange', function(e) {
+            e.preventDefault();
+        });
+        document.addEventListener('gestureend', function(e) {
+            e.preventDefault();
+        });
+
         // 显示自定义文字
         function startTypewriter() {
             const container = document.getElementById('typewriterContainer');
