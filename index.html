@@ -215,6 +215,16 @@
             if (animationStarted) return;
             animationStarted = true;
             
+            // 进入全屏
+            const element = document.documentElement;
+            if (element.requestFullscreen) {
+                element.requestFullscreen();
+            } else if (element.webkitRequestFullscreen) {
+                element.webkitRequestFullscreen();
+            } else if (element.msRequestFullscreen) {
+                element.msRequestFullscreen();
+            }
+
             // 隐藏开始消息
             document.querySelector('.start-message').style.display = 'none';
             
