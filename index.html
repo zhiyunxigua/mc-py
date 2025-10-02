@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>爱你呦</title>
+    <title>爱心文本与烟花背景</title>
     <style>
         * {
             margin: 0;
@@ -139,6 +139,9 @@
             // 初始化音频（在用户交互后）
             initAudio();
             
+            // 立即启动烟花背景
+            startFireworks();
+            
             // 启动爱心动画
             startHeartAnimation();
         }
@@ -254,15 +257,6 @@
                     }
                 }
                 
-                drawTrail() {
-                    ctx.fillStyle = this.color;
-                    ctx.globalAlpha = 0.3;
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size * 0.7, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.globalAlpha = 1;
-                }
-                
                 explode() {
                     this.exploded = true;
                     
@@ -305,6 +299,7 @@
             }
             
             function animate() {
+                // 使用半透明黑色清除画布，创建拖尾效果
                 ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 
@@ -560,11 +555,10 @@
             canvas.height = canvas.clientHeight;
             render();
             
-            // 5秒后开始淡出爱心并启动文本动画和烟花
+            // 5秒后开始淡出爱心并启动文本动画
             setTimeout(() => {
                 fadeHeart();
                 startTextAnimation();
-                startFireworks(); // 在文本动画开始时启动烟花
             }, 5000);
             
             // 窗口大小调整
@@ -651,9 +645,9 @@
                     this.text = text;
                     this.particles = [];
                     
-                    // 创建文字粒子
-                    const fontSize = Math.min(canvas.width * 0.08, 80);
-                    ctx.font = `bold ${fontSize}px Arial`;
+                    // 减小字体大小和粗细
+                    const fontSize = Math.min(canvas.width * 0.06, 60); // 从0.08减小到0.06
+                    ctx.font = `normal ${fontSize}px Arial`; // 从bold改为normal
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
                     
@@ -666,7 +660,7 @@
                     const tempCtx = tempCanvas.getContext('2d');
                     tempCanvas.width = textWidth + 20;
                     tempCanvas.height = fontSize + 20;
-                    tempCtx.font = `bold ${fontSize}px Arial`;
+                    tempCtx.font = `normal ${fontSize}px Arial`; // 从bold改为normal
                     tempCtx.textAlign = "center";
                     tempCtx.textBaseline = "middle";
                     tempCtx.fillStyle = "white";
@@ -675,9 +669,9 @@
                     const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
                     const data = imageData.data;
                     
-                    // 创建粒子
-                    const particleSize = 1.5;
-                    const gap = 2;
+                    // 减少粒子数量和大小，让文字更细
+                    const particleSize = 1.0; // 从1.5减小到1.0
+                    const gap = 3; // 从2增加到3，减少粒子密度
                     
                     for (let i = 0; i < tempCanvas.width; i += gap) {
                         for (let j = 0; j < tempCanvas.height; j += gap) {
@@ -697,7 +691,7 @@
                                     startX, 
                                     startY, 
                                     `hsl(${hue}, ${saturation}%, ${lightness}%)`,
-                                    particleSize + Math.random() * 1.5
+                                    particleSize + Math.random() * 0.8 // 从1.5减小到0.8
                                 ));
                                 
                                 this.particles[this.particles.length - 1].targetX = px;
@@ -706,8 +700,8 @@
                         }
                     }
                     
-                    // 添加额外的随机粒子增加细节
-                    const extraParticles = 500;
+                    // 减少额外粒子数量
+                    const extraParticles = 200; // 从500减少到200
                     for (let i = 0; i < extraParticles; i++) {
                         const px = x - textWidth / 2 + Math.random() * textWidth;
                         const py = y - fontSize / 2 + Math.random() * fontSize;
@@ -723,7 +717,7 @@
                             startX, 
                             startY, 
                             `hsl(${hue}, ${saturation}%, ${lightness}%)`,
-                            particleSize * 0.7 + Math.random() * 1
+                            particleSize * 0.5 + Math.random() * 0.5 // 从1减小到0.5
                         ));
                         
                         this.particles[this.particles.length - 1].targetX = px;
@@ -780,9 +774,8 @@
             
             // 动画循环
             function animate() {
-                // 清除画布
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                // 关键修复：使用完全透明的清除，不覆盖烟花
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
                 // 更新和绘制文字
                 textSystem.update();
