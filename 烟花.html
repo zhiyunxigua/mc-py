@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>烟花效果</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #000;
+            overflow: hidden;
+            touch-action: none;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        canvas {
+            display: block;
+            background-color: #000;
+        }
+        
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 18px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading">烟花加载中...</div>
+    <canvas id="fireworks"></canvas>
+
+    <script>
+        // 获取Canvas元素和上下文
+        const canvas = document.getElementById('fireworks');
+        const ctx = canvas.getContext('2d');
+        const loading = document.querySelector('.loading');
+        
+        // 设置Canvas大小为窗口大小
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        
+        // 初始化Canvas大小
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        // 音效管理器
+        const soundManager = {
+            baseURL: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/329180/',
+            ctx: null,
+            sources: {
+                lift: {
+                    volume: 1,
+                    playbackRateMin: 0.85,
+                    playbackRateMax: 0.95,
+                    fileNames: [
+                        'lift1.mp3',
+                        'lift2.mp3',
+                        'lift3.mp3'
+                    ]
+                },
+                burst: {
+                    volume: 1,
+                    playbackRateMin: 0.8,
+                    playbackRateMax: 0.9,
+                    fileNames: [
+                        'burst1.mp3',
+                        'burst2.mp3'
+                    ]
+                },
+                burstSmall: {
+                    volume: 0.25,
+                    playbackRateMin: 0.8,
+                    playbackRateMax: 1,
+                    fileNames: [
+                        'burst-sm-1.mp3',
+                        'burst-sm-2.mp3'
+                    ]
+                },
+                crackle: {
+                    volume: 0.2,
+                    playbackRateMin: 1,
+                    playbackRateMax: 1,
+                    fileNames: ['crackle1.mp3']
+                },
+                crackleSmall: {
+                    volume: 0.3,
+                    playbackRateMin: 1,
+                    playbackRateMax: 1,
+                    fileNames: ['crackle-sm-1.mp3']
+                }
+            },
+
+            // 初始化音频上下文
+            init() {
+                try {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    return true;
+                } catch (e) {
+                    console.error("音频初始化失败:", e);
+                    return false;
+                }
+            },
+
+            // 播放声音的函数
+            playSound(type, scale=1) {
+                if (!this.ctx) return;
+                
+                const source = this.sources[type];
+                if (!source) return;
+                
+                const fileName = source.fileNames[Math.floor(Math.random()*source.fileNames.length)];
+                const url = this.baseURL + fileName;
+
+                // 加载并播放
+                fetch(url)
+                    .then(resp => resp.arrayBuffer())
+                    .then(data => this.ctx.decodeAudioData(data))
+                    .then(buffer => {
+                        const bufferSource = this.ctx.createBufferSource();
+                        bufferSource.buffer = buffer;
+
+                        // 播放速度（带随机性）
+                        const initialPlaybackRate = source.playbackRateMin + Math.random()*(source.playbackRateMax-source.playbackRateMin);
+                        const scaledPlaybackRate = initialPlaybackRate * (2 - scale);
+                        bufferSource.playbackRate.value = scaledPlaybackRate;
+
+                        // 音量控制
+                        const gainNode = this.ctx.createGain();
+                        gainNode.gain.value = source.volume * scale;
+
+                        bufferSource.connect(gainNode).connect(this.ctx.destination);
+                        bufferSource.start(0);
+                    })
+                    .catch(e => console.error(`加载音效 ${fileName} 失败:`, e));
+            }
+        };
+        
+        // 烟花粒子类
+        class Particle {
+            constructor(x, y, color, velocity, size, decay = 0.02) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.velocity = velocity;
+                this.size = size;
+                this.alpha = 1;
+                this.decay = decay;
+                this.life = 1.0; // 生命周期
+            }
+            
+            update() {
+                this.velocity.y += 0.05; // 重力
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                this.life -= this.decay;
+                this.alpha = this.life;
+                this.size *= 0.99;
+                
+                return this.life > 0; // 返回粒子是否还存活
+            }
+            
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+        
+        // 烟花类
+        class Firework {
+            constructor() {
+                // 随机生成颜色
+                this.color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+                
+                // 从底部随机位置发射
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height;
+                
+                // 随机目标高度
+                this.targetY = canvas.height * (0.2 + Math.random() * 0.4);
+                
+                // 向上发射的速度
+                this.speed = 8 + Math.random() * 5;
+                this.velocity = {
+                    x: 0,
+                    y: -this.speed
+                };
+                
+                // 烟花大小
+                this.size = 2;
+                
+                // 爆炸粒子
+                this.particles = [];
+                
+                // 是否已爆炸
+                this.exploded = false;
+                
+                // 爆炸后计时
+                this.explosionTime = 0;
+                this.maxExplosionTime = 2.0; // 爆炸效果最长持续时间（秒）
+            }
+            
+            update() {
+                if (!this.exploded) {
+                    this.x += this.velocity.x;
+                    this.y += this.velocity.y;
+                    
+                    // 绘制尾迹
+                    this.drawTrail();
+                    
+                    // 检查是否到达目标高度
+                    if (this.y <= this.targetY) {
+                        this.explode();
+                    }
+                } else {
+                    // 更新爆炸粒子
+                    for (let i = this.particles.length - 1; i >= 0; i--) {
+                        const isAlive = this.particles[i].update();
+                        if (!isAlive) {
+                            this.particles.splice(i, 1);
+                        }
+                    }
+                    
+                    // 更新爆炸计时
+                    this.explosionTime += 0.016; // 假设60fps
+                }
+            }
+            
+            draw() {
+                if (!this.exploded) {
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                } else {
+                    // 绘制爆炸粒子
+                    for (const particle of this.particles) {
+                        particle.draw();
+                    }
+                }
+            }
+            
+            drawTrail() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = 0.3;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size * 0.7, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            }
+            
+            explode() {
+                this.exploded = true;
+                
+                // 播放爆炸音效
+                const explosionType = Math.floor(Math.random() * 4);
+                let soundType = 'burst';
+                let scale = 1.0;
+                
+                // 根据爆炸类型选择不同的音效
+                switch (explosionType) {
+                    case 0: // 标准爆炸
+                        soundType = 'burst';
+                        scale = 1.0;
+                        break;
+                    case 1: // 环形爆炸
+                        soundType = 'burst';
+                        scale = 0.9;
+                        break;
+                    case 2: // 双重爆炸
+                        soundType = 'burst';
+                        scale = 1.1;
+                        // 播放两次音效模拟双重爆炸
+                        setTimeout(() => {
+                            soundManager.playSound('burstSmall', 0.8);
+                        }, 150);
+                        break;
+                    case 3: // 心形爆炸
+                        soundType = 'burst';
+                        scale = 0.8;
+                        // 添加额外的爆裂音效
+                        setTimeout(() => {
+                            soundManager.playSound('crackle', 0.7);
+                        }, 200);
+                        break;
+                }
+                
+                soundManager.playSound(soundType, scale);
+                
+                // 随机粒子数量
+                const particleCount = 70 + Math.floor(Math.random() * 100);
+                
+                // 创建爆炸粒子
+                for (let i = 0; i < particleCount; i++) {
+                    let velocity, size, decay;
+                    
+                    // 根据爆炸类型设置粒子属性
+                    switch (explosionType) {
+                        case 0: // 标准爆炸
+                            velocity = {
+                                x: (Math.random() - 0.5) * 8,
+                                y: (Math.random() - 0.5) * 8
+                            };
+                            size = Math.random() * 3 + 1;
+                            decay = 0.02;
+                            break;
+                        case 1: // 环形爆炸
+                            const angle = (i / particleCount) * Math.PI * 2;
+                            const speed = 2 + Math.random() * 4;
+                            velocity = {
+                                x: Math.cos(angle) * speed,
+                                y: Math.sin(angle) * speed
+                            };
+                            size = Math.random() * 2 + 1;
+                            decay = 0.015;
+                            break;
+                        case 2: // 双重爆炸
+                            if (i < particleCount / 2) {
+                                velocity = {
+                                    x: (Math.random() - 0.5) * 6,
+                                    y: (Math.random() - 0.5) * 6
+                                };
+                                size = Math.random() * 2 + 1;
+                            } else {
+                                velocity = {
+                                    x: (Math.random() - 0.5) * 10,
+                                    y: (Math.random() - 0.5) * 10
+                                };
+                                size = Math.random() * 1.5 + 0.5;
+                            }
+                            decay = 0.02;
+                            break;
+                        case 3: // 心形爆炸
+                            const t = (i / particleCount) * Math.PI * 2;
+                            const heartX = 16 * Math.pow(Math.sin(t), 3);
+                            const heartY = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+                            velocity = {
+                                x: heartX * 0.2,
+                                y: -heartY * 0.2
+                            };
+                            size = Math.random() * 2 + 1;
+                            decay = 0.015;
+                            break;
+                    }
+                    
+                    // 随机颜色变化
+                    const hueShift = (Math.random() - 0.5) * 60;
+                    const colorHue = (parseInt(this.color.split('(')[1].split(',')[0]) + hueShift) % 360;
+                    const color = `hsl(${colorHue}, 100%, ${60 + Math.random() * 20}%)`;
+                    
+                    this.particles.push(new Particle(this.x, this.y, color, velocity, size, decay));
+                }
+            }
+            
+            isDone() {
+                // 爆炸后超过最大时间或所有粒子都消失
+                return this.exploded && (this.explosionTime >= this.maxExplosionTime || this.particles.length === 0);
+            }
+        }
+        
+        // 烟花数组
+        let fireworks = [];
+        
+        // 自动发射烟花
+        function autoLaunchFireworks() {
+            // 增加发射频率
+            setTimeout(() => {
+                // 同时发射多个烟花
+                const count = 1 + Math.floor(Math.random() * 2);
+                for (let i = 0; i < count; i++) {
+                    fireworks.push(new Firework());
+                }
+                autoLaunchFireworks();
+            }, 200 + Math.random() * 300); // 更短的间隔
+        }
+        
+        // 动画循环
+        function animate() {
+            // 清除画布
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // 更新和绘制所有烟花
+            for (let i = fireworks.length - 1; i >= 0; i--) {
+                fireworks[i].update();
+                fireworks[i].draw();
+                
+                // 移除已完成的烟花
+                if (fireworks[i].isDone()) {
+                    fireworks.splice(i, 1);
+                }
+            }
+            
+            requestAnimationFrame(animate);
+        }
+        
+        // 启动动画和自动发射
+        function startFireworks() {
+            // 隐藏加载提示
+            loading.style.display = 'none';
+            
+            // 立即发射多个烟花
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    fireworks.push(new Firework());
+                }, i * 150);
+            }
+            
+            // 开始自动发射
+            autoLaunchFireworks();
+            
+            // 开始动画循环
+            animate();
+        }
+        
+        // 页面加载后立即开始
+        window.addEventListener('load', () => {
+            // 初始化音频
+            const audioInitialized = soundManager.init();
+            
+            if (!audioInitialized) {
+                loading.textContent = "音频初始化失败，将静音播放";
+            }
+            
+            // 用户交互后启动音频上下文（解决浏览器自动播放策略）
+            document.body.addEventListener('click', () => {
+                if (soundManager.ctx && soundManager.ctx.state === 'suspended') {
+                    soundManager.ctx.resume();
+                }
+            }, { once: true });
+            
+            // 开始烟花效果
+            startFireworks();
+        });
+    </script>
+</body>
+</html>
