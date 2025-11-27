@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网易我的世界JSON_UI教程</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="../../styles/common.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>stack_grid</h1>
+            <p class="subtitle">作者：西瓜</p>
+        </header>
+        
+        <div class="card">
+            <div class="card-title">
+                <span>介绍</span>
+            </div>
+            <p>stack_grid就是一维的网格，可以选择扩展方向是竖直还是水平，并且可以在python层绑定网格数量</p>
+        </div>
+        
+        <div class="card">
+            <div class="card-title">
+                <span>开始编写</span>
+            </div>
+            <div>
+                <p class="step-title">json示例</p>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Example.json</span>
+                        <button class="copy-btn" data-clipboard-target="#code-1">复制json</button>
+                    </div>
+                    <pre><code id="code-1" class="language-json">
+    "stack_grid_example": {
+        "type": "stack_grid",
+        "bindings": [
+            {
+                "binding_condition": "always",
+                "binding_name": "#stack_grid_example.item_count", // 我们通过该变量名复写引擎中对应的变量名
+                "binding_name_override": "#StackGridItemsCount" // 这是引擎中的变量名，用于控制stack_grid的数量
+            }
+        ],
+        "collection_name": "itemToggles", // 绑定的集合名
+        "controls": [
+            {
+                "item_button@stack_grid_item_button" : {} // stack_grid中的template，改变#StackGridItemsCount的值会动态克隆所有controls
+            }
+        ],
+        "item_count": 10,  // 默认值
+        "orientation": "vertical", // 扩展方向，垂直
+        "property_bag": {  // 属性包
+            "#itemToggleGrid.item_count": 10 // 默认有10个item，实际根据绑定值返回实时更新
+        },
+        "size": [ "100%", "default" ]
+    }</code></pre>
+                </div>
+            </div>
+            
+            <div>
+                <p class="step-title">python示例</p>
+                <p>绑定stack_grid内容的数量</p>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Example.python</span>
+                        <button class="copy-btn" data-clipboard-target="#code-1">复制python</button>
+                    </div>
+                    <pre><code id="code-2" class="language-python">    @ViewBinder.binding(ViewBinder.BF_BindInt, "#stack_grid_example.item_count")
+    def OnReturnStackGridCount(self):
+        # 返回stack_grid内容的数量，对应json的#stack_grid_example.item_count变量
+        return 10
+</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="../../scripts/你的js文件名.js"></script>
+</body>
+</html>
