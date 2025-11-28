@@ -23,19 +23,28 @@
         
         <div class="card">
             <div class="card-title">
+                <span>demo下载</span>
+            </div>
+            <button class="button" onclick="window.location.href='./demo/stack_grid.zip'">
+                下载链接
+            </button>
+        </div>
+        
+        <div class="card">
+            <div class="card-title">
                 <span>开始编写</span>
             </div>
             <div>
                 <p class="step-title">json示例</p>
+                <p>这是一个基本的stack_grid示例，controls就是stack_grid里面的控件，改变#StackGridItemsCount就会克隆所有的controls</p>
                 <div class="code-container">
                     <div class="code-header">
                         <span>Example.json</span>
                         <button class="copy-btn" data-clipboard-target="#code-1">复制json</button>
                     </div>
-                    <pre><code id="code-1" class="language-json">
-    "stack_grid_example": {
+                    <pre><code id="code-1" class="language-json">    "stack_grid_example": {
         "type": "stack_grid",
-        "bindings": [
+        "bindings": [  // 绑定，对应的python代可以看下面的python示例eg.1
             {
                 "binding_condition": "always",
                 "binding_name": "#stack_grid_example.item_count", // 我们通过该变量名复写引擎中对应的变量名
@@ -56,20 +65,145 @@
         "size": [ "100%", "default" ]
     }</code></pre>
                 </div>
+
+                <p>这里我演示在controls里面放按钮，下面这是一个按钮的模板</p>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Example.json</span>
+                        <button class="copy-btn" data-clipboard-target="#code-1">复制json</button>
+                    </div>
+                    <pre><code id="code-1" class="language-json">    "stack_grid_item_button@common.button": {
+        "type": "button",
+        "$control_alpha": 1.0,
+        "$default_texture": "textures/netease/common/button/default",
+        "$hover_texture": "textures/netease/common/button/hover",
+        "$is_new_nine_slice": false,
+        "$label_color": [ 0.3, 0.3, 0.3 ],
+        "$label_font_scale_factor": 1.0,
+        "$label_font_size": "large",
+        "$label_layer": 3,
+        "$label_offset": [ 0, 0 ],
+        "$label_text": "Button",
+        "$nine_slice_buttom": 0,
+        "$nine_slice_left": 0,
+        "$nine_slice_right": 0,
+        "$nine_slice_top": 0,
+        "$nineslice_size": [ 0, 0, 0, 0 ],
+        "$pressed_button_name": "%netease_editor_template_namespace.click",
+        "$pressed_texture": "textures/netease/common/button/pressed",
+        "$texture_layer": 2,
+        "size": [ 100, 50 ],
+        "layer": 2,
+        "button_mappings": [],  // 按钮映射
+        "default_control": "default",
+        "hover_control": "hover",
+        "is_handle_button_move_event": true,
+        "pressed_control": "pressed",
+        "bindings":[],
+        "controls": [
+            {
+                "default@netease_editor_template_namespace.default": {}
+            },
+            {
+                "hover@netease_editor_template_namespace.hover": {}
+            },
+            {
+                "pressed@netease_editor_template_namespace.pressed": {}
+            },
+            {
+                "button_label@netease_editor_template_namespace.button_label": {}
+            }
+        ]
+    }</code></pre>
+                </div>
+                <p>这样的话，就可以在stack_grid中以垂直方向复制10个一样的按钮</p><br>
+                <p>接下来，我们需要实现按钮按下之后调用python方法和在python层设置按钮显示文本</p>
+                <p>现实性按钮按下后调用python方法，这里我使用button_mappings（按钮映射）的方式</p>
+                <p>首先修改按钮里面button_mappings的内容</p>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Example.json</span>
+                        <button class="copy-btn" data-clipboard-target="#code-1">复制json</button>
+                    </div>
+                    <pre><code id="code-1" class="language-json">"button_mappings": [
+    {
+        "from_button_id": "button.menu_select",  // 按钮id，这个表示鼠标左键点击
+        "to_button_id": "#button_click",  // python层绑定的名字
+        "mapping_type": "pressed"  // 映射类型，这里表示按钮按下时触发
+    },
+    {  // 可以同时存在多个映射，这里只需要一个映射就可以
+        "from_button_id": "xxx",
+        "to_button_id": "#xxx",
+        "mapping_type": "xxx"
+    }
+]</code></pre>
+                </div>
+                <p>然后绑定按钮的显示文本</p><br>
+                <p>按钮模板里面有一个button_label控件，我们可以直接修改这个控件</p>
+                <p>在button_label里面添加绑定，这里我们使用集合绑定</p>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Example.json</span>
+                        <button class="copy-btn" data-clipboard-target="#code-1">复制json</button>
+                    </div>
+                    <pre><code id="code-1" class="language-json">"button_label@netease_editor_template_namespace.button_label": {
+    "text": "#button_text",
+    "bindings": [
+        {
+            "binding_name": "#button_text", // 绑定名字，引擎会去找Python里的#button_text
+            "binding_type": "collection", // 绑定类型，默认global，collection为集合绑定
+            "binding_collection_name": "stack_grid_group",  // 绑定的集合名字
+            "binding_condition": "visible"  // 绑定条件，visible为当可见时触发一次
+            }
+    ]
+}</code></pre>
+                </div>
+                <p>这样，我们的json就算完成了</p><br>
             </div>
             
             <div>
                 <p class="step-title">python示例</p>
-                <p>绑定stack_grid内容的数量</p>
+                <p>eg.1 绑定stack_grid内容的数量</p>
                 <div class="code-container">
                     <div class="code-header">
-                        <span>Example.python</span>
+                        <span>Example.py</span>
                         <button class="copy-btn" data-clipboard-target="#code-1">复制python</button>
                     </div>
                     <pre><code id="code-2" class="language-python">    @ViewBinder.binding(ViewBinder.BF_BindInt, "#stack_grid_example.item_count")
     def OnReturnStackGridCount(self):
         # 返回stack_grid内容的数量，对应json的#stack_grid_example.item_count变量
         return 10
+</code></pre>
+                </div>
+
+                <p>eg.2 绑定按钮映射</p>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Example.py</span>
+                        <button class="copy-btn" data-clipboard-target="#code-1">复制python</button>
+                    </div>
+                    <pre><code id="code-2" class="language-python">    # 按下时通过re函数计算出按下的是滚动列表中的第几个按钮
+    @ViewBinder.binding(ViewBinder.BF_ButtonClickUp, "#button_click")
+    def OnButtonClick(self, args):
+        # 按钮按下后有个ButtonPath参数是按钮的路径，可以通过路径的名字，获取按钮的index
+        # 获取到的路径是字符串，通过re函数计算之后的数据类型是list[str]，所以要先索引0，然后转成int格式
+        # 获取到的index是从1开始的，如果需要从0开始，就要-1
+        button_index = int(re.compile(r'\d+').findall(args["ButtonPath"].split('/')[-1])[0]) - 1
+        print "第 §b" + str(button_index) + "§8 个按钮按下啦！"
+</code></pre>
+                </div>
+                
+                <p>eg.3 绑定按钮显示文本</p>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Example.py</span>
+                        <button class="copy-btn" data-clipboard-target="#code-1">复制python</button>
+                    </div>
+                    <pre><code id="code-2" class="language-python">    @ViewBinder.binding_collection(ViewBinder.BF_BindString, "stack_grid_group", "#button_text")
+    def OnReturnButtonText(self, index):
+        print index
+        return "第 §b" + str(index) + "§8 个按钮"
+
 </code></pre>
                 </div>
             </div>
