@@ -51,7 +51,7 @@
                 "binding_name_override": "#StackGridItemsCount" // 这是引擎中的变量名，用于控制stack_grid的数量
             }
         ],
-        "collection_name": "itemToggles", // 绑定的集合名
+        "collection_name": "itemToggles", // 绑定的集合名字
         "controls": [
             {
                 "item_button@stack_grid_item_button" : {} // stack_grid中的template，改变#StackGridItemsCount的值会动态克隆所有controls
@@ -99,7 +99,7 @@
         "hover_control": "hover",
         "is_handle_button_move_event": true,
         "pressed_control": "pressed",
-        "bindings":[],
+        "bindings":[],  // 按钮绑定
         "controls": [
             {
                 "default@netease_editor_template_namespace.default": {}
@@ -118,7 +118,7 @@
                 </div>
                 <p>这样的话，就可以在stack_grid中以垂直方向复制10个一样的按钮</p><br>
                 <p>接下来，我们需要实现按钮按下之后调用python方法和在python层设置按钮显示文本</p>
-                <p>现实性按钮按下后调用python方法，这里我使用button_mappings（按钮映射）的方式</p>
+                <p>先实现按钮按下后调用python方法，这里我使用button_mappings（按钮映射）的方式，并且通过collection_details绑定来绑定按钮的inddex</p>
                 <p>首先修改按钮里面button_mappings的内容</p>
                 <div class="code-container">
                     <div class="code-header">
@@ -135,6 +135,20 @@
         "from_button_id": "xxx",
         "to_button_id": "#xxx",
         "mapping_type": "xxx"
+    }
+]</code></pre></div>
+                <p>然后是按钮绑定</p>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Example.json</span>
+                        <button class="copy-btn" data-clipboard-target="#code-1">复制json</button>
+                    </div>
+                    <pre><code id="code-1" class="language-json">"bindings": [
+    {
+        "binding_name": "#button_index", // 这个绑定用于回调可以获取index，没有其他用途，可随意更改
+        "binding_type": "collection_details",
+        "binding_collection_name": "stack_grid_group",  // 绑定的集合名字
+        "binding_condition": "visible"
     }
 ]</code></pre>
                 </div>
@@ -182,14 +196,10 @@
                         <span>Example.py</span>
                         <button class="copy-btn" data-clipboard-target="#code-1">复制python</button>
                     </div>
-                    <pre><code id="code-2" class="language-python">    # 按下时通过re函数计算出按下的是滚动列表中的第几个按钮
-    @ViewBinder.binding(ViewBinder.BF_ButtonClickUp, "#button_click")
+                    <pre><code id="code-2" class="language-python">    @ViewBinder.binding(ViewBinder.BF_ButtonClickUp, "#button_click")
     def OnButtonClick(self, args):
-        # 按钮按下后有个ButtonPath参数是按钮的路径，可以通过路径的名字，获取按钮的index
-        # 获取到的路径是字符串，通过re函数计算之后的数据类型是list[str]，所以要先索引0，然后转成int格式
-        # 获取到的index是从1开始的，如果需要从0开始，就要-1
-        button_index = int(re.compile(r'\d+').findall(args["ButtonPath"].split('/')[-1])[0]) - 1
-        print "第 §b" + str(button_index) + "§8 个按钮按下啦！"
+        index = args["#collection_index"]
+        print index
 </code></pre>
                 </div>
                 
@@ -203,7 +213,6 @@
     def OnReturnButtonText(self, index):
         print index
         return "第 §b" + str(index) + "§8 个按钮"
-
 </code></pre>
                 </div>
             </div>
