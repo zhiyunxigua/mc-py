@@ -14,6 +14,9 @@
             --border-radius: 8px;
             --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             --accent-color: #2e7d32;
+            --highest-color: #2e7d32; /* 绿色 - 最高分 */
+            --lowest-color: #e74c3c;  /* 红色 - 最低分 */
+            --highlight-bg: #f8f9fa;
         }
 
         * {
@@ -55,6 +58,7 @@
         .subtitle {
             color: var(--secondary-text);
             font-size: 14px;
+            margin-top: 8px;
         }
 
         .card {
@@ -126,6 +130,7 @@
             padding: 0;
             border: 1px solid var(--border-color);
             overflow: hidden;
+            margin-top: 20px;
         }
 
         .result-item {
@@ -149,12 +154,14 @@
             font-weight: 500;
             color: var(--text-color);
             font-size: 15px;
+            display: flex;
+            align-items: center;
         }
 
         .result-value {
             font-weight: 600;
             font-size: 16px;
-            color: var(--accent-color);
+            color: var(--text-color);
             min-width: 80px;
             text-align: right;
         }
@@ -162,6 +169,40 @@
         .placeholder {
             color: var(--secondary-text);
             font-weight: normal;
+        }
+
+        .highlight-highest {
+            background-color: rgba(46, 125, 50, 0.08);
+            border-left: 3px solid var(--highest-color);
+        }
+
+        .highlight-highest .result-value {
+            color: var(--highest-color);
+        }
+
+        .highlight-highest .formula-name::after {
+            content: " (最高分)";
+            font-size: 12px;
+            color: var(--highest-color);
+            font-weight: normal;
+            margin-left: 5px;
+        }
+
+        .highlight-lowest {
+            background-color: rgba(231, 76, 60, 0.08);
+            border-left: 3px solid var(--lowest-color);
+        }
+
+        .highlight-lowest .result-value {
+            color: var(--lowest-color);
+        }
+
+        .highlight-lowest .formula-name::after {
+            content: " (最低分)";
+            font-size: 12px;
+            color: var(--lowest-color);
+            font-weight: normal;
+            margin-left: 5px;
         }
 
         .info-text {
@@ -176,24 +217,75 @@
             font-weight: 500;
         }
 
-        .copied-notice {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 8px 16px;
-            border-radius: var(--border-radius);
+        .score-range {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
             font-size: 14px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: 100;
-            pointer-events: none;
+            color: var(--secondary-text);
         }
 
-        .show-notice {
-            opacity: 1;
+        .range-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .range-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            margin-right: 8px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin: 20px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .formula-list {
+            background-color: #f9f9f9;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .formula-item {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: baseline;
+        }
+
+        .formula-index {
+            display: inline-block;
+            width: 20px;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .warning-box {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 12px 15px;
+            margin: 15px 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        .warning-title {
+            font-weight: 600;
+            color: #e65100;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .warning-title .icon {
+            margin-right: 8px;
         }
 
         @media (max-width: 600px) {
@@ -253,34 +345,26 @@
             <div class="input-group">
                 <div class="input-box">
                     <label for="culture-score">文化课总分</label>
-                    <input type="number" id="culture-score" min="0" max="750" placeholder="0-750分">
+                    <input type="number" id="culture-score" min="0" max="750" placeholder="请输入0-750分">
                 </div>
                 <div class="input-box">
                     <label for="art-score">专业课成绩</label>
-                    <input type="number" id="art-score" min="0" max="300" placeholder="0-300分">
+                    <input type="number" id="art-score" min="0" max="300" placeholder="请输入0-300分">
                 </div>
             </div>
             
             <div class="result-list" id="results-container">
-                <div class="result-item">
-                    <span class="formula-name">文化总分</span>
-                    <span class="result-value placeholder">-</span>
+                <!-- 结果将通过JavaScript动态生成 -->
+            </div>
+            
+            <div class="score-range">
+                <div class="range-item">
+                    <div class="range-color" style="background-color: var(--highest-color);"></div>
+                    <span>最高分（绿色）</span>
                 </div>
-                <div class="result-item">
-                    <span class="formula-name">文化×0.8 + 专业×0.5</span>
-                    <span class="result-value placeholder">-</span>
-                </div>
-                <div class="result-item">
-                    <span class="formula-name">文化×0.7 + 专业×0.75</span>
-                    <span class="result-value placeholder">-</span>
-                </div>
-                <div class="result-item">
-                    <span class="formula-name">文化×0.6 + 专业×1</span>
-                    <span class="result-value placeholder">-</span>
-                </div>
-                <div class="result-item">
-                    <span class="formula-name">文化×0.5 + 专业×1.25</span>
-                    <span class="result-value placeholder">-</span>
+                <div class="range-item">
+                    <div class="range-color" style="background-color: var(--lowest-color);"></div>
+                    <span>最低分（红色）</span>
                 </div>
             </div>
         </div>
@@ -288,24 +372,82 @@
         <div class="card">
             <div class="card-title">
                 <span class="icon">ℹ️</span>
-                <span>说明</span>
+                <span>详细说明</span>
+            </div>
+            
+            <p class="info-text">
+                本计算器专为<strong>河南省艺术类高考（使用省统考成绩的专业）考生</strong>设计。河南艺术类录取采用全省统一的<strong>5种不同权重综合分计算公式</strong>，不同院校从中自选其一作为录取依据。这意味着相同的高考文化课与专业课成绩，在不同院校计算出的录取分数完全不同。
+            </p>
+            
+            <p class="info-text">
+                本工具的核心用途是：通过输入成绩，<strong>一键实时计算5种公式的全部结果，并自动标出最高分（绿色）与最低分（红色）</strong>，让考生直观看到自己在哪种录取规则下竞争力最强，从而帮助考生在填报志愿时精准定位那些采用对自己最有利公式的院校和专业，规避劣势规则，<strong>实现志愿填报的优化，提高录取成功率</strong>。
+            </p>
+            
+            <div class="section-title">河南综合分计算方式说明</div>
+            <div class="formula-list">
+                <div class="formula-item">
+                    <span class="formula-index">1.</span>
+                    <span>文化课成绩×100% + 专业课成绩×0%</span>
+                </div>
+                <div class="formula-item">
+                    <span class="formula-index">2.</span>
+                    <span>文化课成绩×0.8 + 专业课成绩×0.5</span>
+                </div>
+                <div class="formula-item">
+                    <span class="formula-index">3.</span>
+                    <span>文化课成绩×0.7 + 专业课成绩×0.75</span>
+                </div>
+                <div class="formula-item">
+                    <span class="formula-index">4.</span>
+                    <span>文化课成绩×0.6 + 专业课成绩×1</span>
+                </div>
+                <div class="formula-item">
+                    <span class="formula-index">5.</span>
+                    <span>文化课成绩×0.5 + 专业课成绩×1.25（默认公式）</span>
+                </div>
             </div>
             <p class="info-text">
-                河南省专业课录取采用5种综合分计算公式，院校可从中选择一种作为录取依据。
+                各院校须在招生章程中明确当年所使用的具体公式。若未说明，则<strong>默认采用第五种公式（文化×0.5 + 专业×1.25）</strong>。
             </p>
+            
+            <div class="section-title">主要功能与用途</div>
             <p class="info-text">
-                <span class="highlight">适用：</span> 美术与设计类、书法类、音乐类、舞蹈类、表（导）演类、播音与主持类。
+                • <strong>一键多算，全面对比</strong>：免除手动计算的繁琐，瞬间展示所有可能结果。<br>
+                • <strong>优劣分析，辅助决策</strong>：高亮显示的<strong>最高分</strong>代表你的优势录取规则，<strong>最低分</strong>代表劣势规则。这能直接指导你重点寻找采用"优势公式"的院校，避开采用"劣势公式"的院校。<br>
+                • <strong>模拟填报，制定策略</strong>：可根据预估或实际成绩，反复模拟计算，为不同分数情况制定填报策略。
             </p>
-            <p class="info-text">
-                <span class="highlight">不适用：</span> 戏曲类、使用校考成绩的专业。
-            </p>
-            <p class="info-text">
-                <span class="highlight">注意：</span> 公式5为院校未说明时的默认计算方式。需同时达到专业统考合格线和文化课控制线才有投档资格。
-            </p>
+            
+            <div class="section-title">重要注意事项</div>
+            <div class="warning-box">
+                <div class="warning-title">
+                    <span class="icon">⚠️</span>
+                    <span>适用范围与前提条件</span>
+                </div>
+                <p class="info-text" style="margin-bottom: 8px;">
+                    • 本计算器适用于<strong>美术、书法、音乐、舞蹈、表（导）演、播音与主持</strong>等使用河南省艺术类统考成绩的专业。
+                </p>
+                <p class="info-text" style="margin-bottom: 8px;">
+                    • <strong>不适用于</strong>戏曲类及使用校考成绩录取的专业。
+                </p>
+                <p class="info-text">
+                    • 无论综合分多高，考生<strong>必须同时达到</strong>当年度河南省划定的艺术类本科文化控制线和专业统考合格线，方具备投档资格。
+                </p>
+            </div>
+            
+            <div class="warning-box">
+                <div class="warning-title">
+                    <span class="icon">📋</span>
+                    <span>数据核实与官方依据</span>
+                </div>
+                <p class="info-text" style="margin-bottom: 8px;">
+                    • 最终投档录取以河南省招生办公室和高校官方公布的招生章程及分数为准。本工具计算结果仅供参考。
+                </p>
+                <p class="info-text">
+                    • 填报前，务必在目标院校的官方招生章程中核实其明确采用的综合分计算公式。
+                </p>
+            </div>
         </div>
     </div>
-
-    <div class="copied-notice" id="copiedNotice">已复制到剪贴板</div>
 
     <script>
         // 计算公式数据
@@ -320,7 +462,25 @@
         // 获取DOM元素
         const cultureInput = document.getElementById('culture-score');
         const artInput = document.getElementById('art-score');
-        const resultItems = document.querySelectorAll('.result-item');
+        const resultsContainer = document.getElementById('results-container');
+        
+        // 初始化结果列表
+        function initializeResultsList() {
+            resultsContainer.innerHTML = '';
+            
+            formulas.forEach((formula, index) => {
+                const resultItem = document.createElement('div');
+                resultItem.className = 'result-item';
+                resultItem.id = `result-item-${index}`;
+                
+                resultItem.innerHTML = `
+                    <span class="formula-name">${formula.name}</span>
+                    <span class="result-value placeholder">-</span>
+                `;
+                
+                resultsContainer.appendChild(resultItem);
+            });
+        }
         
         // 计算并更新结果
         function calculateResults() {
@@ -335,48 +495,77 @@
                 artInput.value = Math.min(Math.max(art, 0), 300);
             }
             
+            // 计算所有结果
+            const results = formulas.map((formula, index) => {
+                return {
+                    index,
+                    name: formula.name,
+                    value: formula.calc(culture, art)
+                };
+            });
+            
+            // 找到最高分和最低分（排除文化总分）
+            const calculatedResults = results.slice(1); // 排除第一个（文化总分）
+            let maxResult = { value: -Infinity };
+            let minResult = { value: Infinity };
+            
+            calculatedResults.forEach(result => {
+                if (result.value > maxResult.value) {
+                    maxResult = result;
+                }
+                if (result.value < minResult.value) {
+                    minResult = result;
+                }
+            });
+            
             // 更新每个结果项
-            resultItems.forEach((item, index) => {
-                const resultValue = item.querySelector('.result-value');
-                const formula = formulas[index];
+            results.forEach(result => {
+                const resultItem = document.getElementById(`result-item-${result.index}`);
+                const resultValue = resultItem.querySelector('.result-value');
+                
+                // 移除所有高亮类
+                resultItem.classList.remove('highlight-highest', 'highlight-lowest');
                 
                 if (culture === 0 && art === 0) {
                     resultValue.textContent = '-';
                     resultValue.className = 'result-value placeholder';
                 } else {
-                    const result = formula.calc(culture, art);
-                    resultValue.textContent = result.toFixed(2);
+                    resultValue.textContent = result.value.toFixed(2);
                     resultValue.className = 'result-value';
+                    
+                    // 应用高亮（排除文化总分）
+                    if (result.index > 0) {
+                        if (result.index === maxResult.index) {
+                            resultItem.classList.add('highlight-highest');
+                        } else if (result.index === minResult.index) {
+                            resultItem.classList.add('highlight-lowest');
+                        }
+                    }
                 }
             });
         }
         
-        // 添加输入事件监听
-        cultureInput.addEventListener('input', calculateResults);
-        artInput.addEventListener('input', calculateResults);
-        
-        // 添加示例数据复制功能
-        function copyExampleData() {
-            const exampleData = "文化课: 500分, 专业课: 240分";
-            navigator.clipboard.writeText(exampleData).then(() => {
-                showNotice();
-            });
-        }
-        
-        function showNotice() {
-            const notice = document.getElementById('copiedNotice');
-            notice.classList.add('show-notice');
-            setTimeout(() => {
-                notice.classList.remove('show-notice');
-            }, 2000);
-        }
-        
         // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', () => {
-            // 设置示例数据
-            cultureInput.value = 500;
-            artInput.value = 240;
-            calculateResults();
+            initializeResultsList();
+            
+            // 添加输入事件监听
+            cultureInput.addEventListener('input', calculateResults);
+            artInput.addEventListener('input', calculateResults);
+            
+            // 设置初始焦点
+            cultureInput.focus();
+            
+            // 添加键盘快捷键
+            document.addEventListener('keydown', (e) => {
+                // Ctrl + Enter 清空输入
+                if (e.ctrlKey && e.key === 'Enter') {
+                    cultureInput.value = '';
+                    artInput.value = '';
+                    calculateResults();
+                    cultureInput.focus();
+                }
+            });
         });
     </script>
 </body>
