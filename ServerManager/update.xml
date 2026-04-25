@@ -2,6 +2,5 @@
 <item>
   <version>1.0.1.0</version>
   <url>https://xiguayun.com.cn/ServerManager/setup.exe</url>
-  <changelog>修复了若干 bug，优化了性能</changelog>
   <mandatory>false</mandatory>
 </item>
