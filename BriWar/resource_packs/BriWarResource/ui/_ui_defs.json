@@ -1,7 +1,0 @@
-{
-    "ui_defs": [
-        "ui/form.json",
-        "ui/hud_ui.json",
-        "ui/hud_screen.json"
-    ]
-}
