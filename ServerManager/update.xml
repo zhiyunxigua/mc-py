@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <item>
-  <version>1.0.7.0</version>
-  <url>https://raw.githubusercontent.com/zhiyunxigua/mc-py/main/ServerManager/setup.exe</url>
+  <version>1.0.8.0</version>
+  <url>http://120.220.76.204:61000/file/1.0.8.0.exe</url>
   <mandatory>false</mandatory>
 </item>
