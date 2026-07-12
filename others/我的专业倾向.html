@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html><head>
+        <meta content="text/html" charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+        <title>专业倾向测评</title>
+        <link rel="icon" href="https://t4.chei.com.cn/xz/favicon.ico" type="image/x-icon">
+        <link rel="stylesheet" href="https://t3.chei.com.cn/gaokao/2026/zyqxcp/assets/web/css/app.css">
+        <style>
+            .banner-top {
+                background: #fff;
+            }
+            .qjjh-cp-fm-btn .button {
+                background: #fe7400;
+            }
+            .qjjh-cp-fm-btn .button:hover {
+                background: #fe8219;
+            }
+            .qjjh-cp-header.zyxq-survey {
+                height: 180px;
+                background: #ffe395 url("https://t2.chei.com.cn/gaokao/2026/zyqxcp/assets/web/images/banner-zyck-survey.jpg") center center/auto 180px no-repeat;
+            }
+            .qjjh-cp-header.zyck-result{
+                height: 180px;
+                background-image: url(https://t4.chei.com.cn/bm/jcxkzs/cp/assets/images/banner-zyck.jpg),linear-gradient(180deg, #49C48D , #fe7400);
+                background-image: -webkit-image-set(url(https://t4.chei.com.cn/bm/jcxkzs/cp/assets/images/banner-zyck.jpg) 1x, url(https://t4.chei.com.cn/bm/jcxkzs/cp/assets/images/banner-zyck-2x.jpg) 2x),linear-gradient(180deg, #49C48D , #fe7400);
+                background-repeat: no-repeat;
+                background-position: center center;
+            }
+            .qjjh-cp-header-info .width-1180 {
+                padding-top: 140px;
+                padding-left: 30px;
+            }
+            .qjjh-cp-footer {
+                line-height: 30px;
+            }
+            .part-zyqx-table td {
+                padding: 8px 0;
+            }
+            .ivu-modal-confirm {
+                .ivu-icon-ios-help-circle::before {
+                    content: '\F108'
+                }
+            }
+            .zycp-img {
+                display: block;
+                width: 100%;
+                margin-top: 20px;
+                margin-bottom: 20px;
+                overflow: hidden;
+                border-radius: 6px;
+            }
+            .zycp-img img {
+                display: block;
+                width: 100%;
+                transition: transform .5s;
+            }
+            .zycp-img:hover img {
+                transform: scale(1.1);
+            }
+            .ivu-btn-primary {
+                background-color: #fe7400;
+                border-color: #fe7400;
+            }
+            .ivu-btn-primary:hover {
+                background-color: #fe8219;
+                border-color: #fe8219;
+            }
+            .ivu-modal-confirm-head-icon-info {
+                color: #fe7400;
+            }
+            .qjjh-cp-tip {
+                background: #f8f8f5;
+            }
+            .qjjh-cp-doc-part .part-title .part-title-num {
+                color: #fe7400;
+            }
+            .affix-container a:hover {
+                color: #fe7400;
+            }
+            .qjjh-cp-step .qjjh-cp-step-icon.icon-3 {
+                background-image: url(https://t1.chei.com.cn/gaokao/2026/zyqxcp/assets/web/images/step-3.svg);
+            }
+            .qjjh-cp-step .qjjh-cp-step-icon.icon-1 {
+                background-image: url(https://t2.chei.com.cn/gaokao/2026/zyqxcp/assets/web/images/step-1.svg);
+            }
+            .qjjh-cp-step .qjjh-cp-step-icon.icon-2 {
+                background-image: url(https://t3.chei.com.cn/gaokao/2026/zyqxcp/assets/web/images/step-2.svg);
+            }
+            .ml-icon {
+                background-image: url(https://t1.chei.com.cn/gaokao/2026/zyqxcp/assets/web/images/list-icon.svg);
+            }
+            .qjjh-cp-fmbg {
+                border: none;
+                background-image: none;
+            }
+            .part-zyqx .part-zyqx-line {
+                background: #f8f8f5;
+            }
+            .qjjh-cp-doc-time {
+                font-size: 16px;
+                color: #666;
+                text-align: center;
+                margin-top: 10px;
+            }
+            .qjjh-cp-lx {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-top: 16px;
+            }
+            .lx-item {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                width: calc((100% - 32px) / 3);
+                font-size: 20px;
+                line-height: 28px;
+                font-weight: 700;
+                color: #fff;
+                height: 100px;
+                border-radius: 8px;
+            }
+            .lx-item.rg {
+                background: linear-gradient( 180deg, #B6ABF7 0%, #8978F4 100%);
+            }
+            .lx-item.xq {
+                background: linear-gradient( 180deg, #94B3EE 0%, #5B8BE9 100%);
+            }
+            .lx-item.xkqx {
+                background: linear-gradient( 180deg, #F2A9DA 0%, #E878BA 100%);
+            }
+            .lx-item .des {
+                font-size: 16px;
+                line-height: 24px;
+                margin-top: 8px;
+                font-weight: 400;
+            }
+            .lx-item .des-title {
+                margin-right: 32px;
+            }
+            .lx-item .des-title:last-child {
+                margin-right: 0;
+            }
+            .qjjh-cp-doc-ml {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-top: 20px;
+                padding: 8px;
+            }
+            .doc-ml-item {
+                width: 250px;
+                height: 40px;
+                font-size: 16px;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #333;
+            }
+            .doc-ml-item:hover {
+                background: #FFFFFF;
+                border-radius: 4px;
+                color: #fe7400;
+            }
+        </style>
+
+
+<script type="text/javascript" async="" src="https://www.google-analytics.com/analytics.js"></script><script type="text/javascript" async="" src="https://www.googletagmanager.com/gtag/js?id=G-5FHT145N0D&amp;cx=c&amp;gtm=4e66o1"></script><script src="https://hm.baidu.com/hm.js?19141110b831c2c573190bb7a3b0ef3f"></script><script>
+  var _hmt = _hmt || [];
+  (function() {
+  &nbsp; var hm = document.createElement("script");
+  &nbsp; hm.src = "https://hm.baidu.com/hm.js?19141110b831c2c573190bb7a3b0ef3f";
+  &nbsp; var s = document.getElementsByTagName("script")[0];
+  &nbsp; s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-100524-6"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-100524-6');
+</script>
+<script>
+  function gaTrackerOutboundLink(params,params2) { //ga链接埋点
+      gtag('event', params.eventAction, {
+          'event_category': params.eventCategory,
+          'event_label': params.eventLabel
+      });
+      return true;
+  };
+</script>
+    <style type="text/css">
+  .g6-component-contextmenu {
+    border: 1px solid #e2e2e2;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #545454;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 10px 8px;
+    box-shadow: rgb(174, 174, 174) 0px 0px 10px;
+  }
+  .g6-contextmenu-ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+
+  .g6-component-toolbar {
+    position: absolute;
+    list-style-type: none;
+    padding: 6px;
+    left: 0px;
+    top: 0px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid #e2e2e2;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #545454;
+    margin: 0;
+  }
+  .g6-component-toolbar li {
+    float: left;
+    text-align: center;
+    width: 35px;
+    height: 24px;
+    cursor: pointer;
+		list-style-type:none;
+    list-style: none;
+    margin-left: 0px;
+  }
+  .g6-component-toolbar li .icon {
+    opacity: 0.7;
+  }
+  .g6-component-toolbar li .icon:hover {
+    opacity: 1;
+  }
+
+  .g6-component-tooltip {
+    border: 1px solid #e2e2e2;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #545454;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 10px 8px;
+    box-shadow: rgb(174, 174, 174) 0px 0px 10px;
+  }
+  .tooltip-type {
+    padding: 0;
+    margin: 0;
+  }
+  .tooltip-id {
+    color: #531dab;
+  }
+</style></head>
+    <body>
+        <div id="app" class="ch-sticky qjjh-cp-container"><div class="banner-top"><div class="width-1180 clearfix"><div class="banner-top-left"><a href="https://gaokao.chsi.com.cn/zyck/stu/xlcp/index"><i class="ivu-icon ivu-icon-ios-arrow-back"></i> 返回志愿参考</a></div> <div class="banner-top-right"><a href="//account.chsi.com.cn/account/account!show">
+                    chsi_93yrlimfq2ysevxa678m
+                </a> <a>退出</a></div></div></div> <div class="qjjh-cp-header zyxq-survey"></div> <div class="width-1180"><div class="qjjh-cp-card margin-top-20"><div class="qjjh-cp-card-title">
+            报告说明
+        </div> <div class="qjjh-cp-card-des">
+            1. 该测评由北大、北师大、南师大心理和职业生涯规划领域教授、专家根据专业理论结合本土化特点编制而成；<br>
+            2. 测评结果会受到多种因素的影响，如作答题目的认真程度、当前个人的状态等等；<br>
+            3. 报告内容共分为兴趣类型、人格类型、学科倾向三个维度，多方面评估个人内在兴趣与学科倾向；<br>
+            4. 专业倾向是根据学信网大数据研究结果得出，具有一定科学性和参考价值。但由于社会、学校、家庭等因素的影响，以及对自我的认知并不全面等原因，部分专业可能与自我第一感觉不相符，建议将此类专业纳入考虑范围，在加深自我认知后再决定取舍；<br>
+            5. 心理测评结果具有阶段性和发展性，本测评报告仅能代表现阶段的个人状态，测试结论用作他处请慎重，并请咨询专业人士；<br>
+            6. 测评报告仅提供个人参考，不提供给高校等其他单位和个人，不与实际报名挂钩。
+        </div></div> <div class="qjjh-cp-card margin-top-20" style="position: relative;"><div style="position: absolute; right: -140px;"><div class="" style=""><div class="affix-container"><div class="affix-container-item"><a href="#cp-1">01 兴趣类型</a></div> <div class="affix-container-item"><a href="#cp-2">02 人格类型</a></div> <div class="affix-container-item"><a href="#cp-3">03 学科倾向</a></div> <div class="affix-container-item"><a href="#cp-4">04 专业倾向</a></div> <div class="affix-container-icon"><a href="#app"><i class="ivu-icon ivu-icon-ios-arrow-up"></i></a></div> <div class="affix-container-top"><a href="#app">返回顶部</a></div></div></div> <div style="display: none;"></div></div> <h2 class="qjjh-cp-doc-title">我的综合测评结果</h2> <div class="qjjh-cp-doc-time">2026-06-26</div> <div class="top-warning">注意：你在测评过程中可能存在干扰因素，测评结果请谨慎参考</div> <div id="mountNode" style="margin: 20px auto 0px; width: 1049px;"><canvas width="1049" height="360" style="width: 1049px; height: 360px; cursor: default;"></canvas></div> <div class="qjjh-cp-doc-warp"><div class="qjjh-cp-doc-ml"><a href="#cp-1" class="doc-ml-item">01&ensp;兴趣类型</a> <a href="#cp-2" class="doc-ml-item">02&ensp;人格类型</a> <a href="#cp-3" class="doc-ml-item">03&ensp;学科倾向</a> <a href="#cp-4" class="doc-ml-item">04&ensp;专业倾向</a></div> <div class="qjjh-cp-doc-part"><h3 id="cp-1" class="part-title"><span class="part-title-num">01</span>兴趣类型</h3> <div class="part-des">
+                    兴趣是个体对某种事物或从事某种活动的选择性态度和积极的情绪反应。实践证明：在影响职业发展的诸多因素中，兴趣对于职业发展的方向选择和维持都有着重要影响。根据霍兰德职业兴趣理论，可以将职业兴趣分为6个维度，每个维度最低得分1分，最高得分5分，分数越高，在此维度上的兴趣越浓厚。
+                </div> <div class="part-detail clearfix"><div id="mountNodeXq" class="part-detail-canvas xq"><div style="position:relative;"><canvas width="476" height="376" style="width: 476px; height: 376px; display: inline-block; vertical-align: middle; cursor: default;"></canvas></div></div> <div class="part-detail-des"><div class="part-detail-des-top" style="margin-bottom: 24px;"><div class="clearfix"><div class="title">你的兴趣类型为：</div> <div class="type ivu-row" style="margin-left: -8px; margin-right: -8px;"><div class="ivu-col ivu-col-span-8" style="padding-left: 8px; padding-right: 8px;"><div class="type-item"><div class="title-type">R</div> <div class="title-name">技能型</div></div></div><div class="ivu-col ivu-col-span-8" style="padding-left: 8px; padding-right: 8px;"><div class="type-item"><div class="title-type">E</div> <div class="title-name">经营型</div></div></div><div class="ivu-col ivu-col-span-8" style="padding-left: 8px; padding-right: 8px;"><div class="type-item"><div class="title-type">I</div> <div class="title-name">研究型</div></div></div></div></div></div> <div class="part-detail-des-bottom"><div class="content-item"><h4 class="content-item-title">技能型（R）</h4> <div class="content-item-des"><p>特点：喜欢操作机械、修理仪器等需要技术的活动；喜欢用实际行动代替言语表达，重视现在胜于重视未来；喜欢具体明确、需要动手操作的环境；对机械、电子、建筑、农事等方面的内容很感兴趣。通常情绪稳定、忍耐力强，给人以诚实、谦和、踏实的印象。</p></div></div><div class="content-item"><h4 class="content-item-title">经营型（E）</h4> <div class="content-item-des"><p>特点：喜欢以言语说服或影响他人，领导他人；乐于参与销售、管理、法律、政治方面的活动；做事有组织、有计划，喜欢立刻采取行动，带领同伴达成目标。通常精力充沛，生活紧凑，善于表达，希望拥有权力。</p></div></div><div class="content-item"><h4 class="content-item-title">研究型（I）</h4> <div class="content-item-des"><p>特点：喜欢研究且解决抽象的问题，喜欢运用心智能力去观察、分析、推理，喜欢与符号、概念、文字、抽象思考有关的活动；喜欢钻研理化、生物等需要动脑的研究性问题；在研究过程中表现出优异的科学能力。通常个性独立、温和、谨慎、理性、有逻辑。</p></div></div></div></div></div></div> <div class="qjjh-cp-doc-line"></div> <div class="qjjh-cp-doc-part"><h3 id="cp-2" class="part-title"><span class="part-title-num">02</span>人格类型</h3> <div class="part-des">
+                    人格是一个人所具有的与他人相区别的独特而稳定的思维方式和行为风格，通过人格测评可以了解一个人是否适合某一职业或组织。结果最低分1分，最高分5分，分数越高表示你在该方向的人格特点越突出。
+                </div> <div class="part-rg"><div class="part-detail clearfix"><div id="mountNodeRg" class="part-detail-canvas rg"><div style="position:relative;"><canvas width="520" height="336" style="width: 520px; height: 336px; display: inline-block; vertical-align: middle;"></canvas></div></div> <div class="part-detail-des"><div class="title">你的优势人格类型为：<span class="title-type">开放</span></div> <div class="part-detail-des-p"><div class="content-item" style="margin-bottom: 20px;"><h4 class="content-item-title"><p>你具有非常高的开放性和好奇心，这一点和动物中的猫很相像。</p></h4> <div class="content-item-des">你总是对新奇的事物充满好奇，想要去观察和了解。即使担心尝试新事物对自己有不好的影响，仍然会小心翼翼的去接触。你的思维较为开放，能接受一些自己不曾听说过的新观点，也能很容易的融入陌生的环境。</div></div> <div class="content-item"><h4 class="content-item-title">发展建议</h4> <div class="content-item-des">你应当保持这种对新鲜事物和陌生情境的积极接纳和主动探求，这会在面对挑战时给予你巨大的帮助。</div></div></div></div></div></div></div> <div class="qjjh-cp-doc-line"></div> <div class="qjjh-cp-doc-part"><h3 id="cp-3" class="part-title"><span class="part-title-num">03</span>学科倾向</h3> <div class="part-des">
+                    个体的学科倾向，在高中阶段的生活与学习中已可见踪影。通过对自身学科倾向的了解，可以更准确的把握大学阶段适合的专业门类。
+                </div> <div class="part-detail clearfix"><div id="mountNodeXkqx" class="part-detail-canvas xkqx"><div style="position:relative;"><canvas width="450" height="450" style="width: 450px; height: 450px; display: inline-block; vertical-align: middle;"></canvas></div></div> <div class="part-detail-des"><div class="part-detail-des-top" style="margin-bottom: 24px;"><div class="des-title">你的学科倾向为：<span class="title-type">工学</span><span class="title-type">管理学</span><span class="title-type">理学</span></div></div> <div class="part-detail-des-bottom"><div class="content-item"><h4 class="content-item-title">工学</h4> <div class="content-item-des"><p><span>工学学科专业是创新与工程实践并重的特色专业，强调特色知识模块教育，重在培养学生的创新思维与提出并解决现场问题的能力、工程设计与实施的能力。下设专业众多，包括机械工程、材料科学与工程、电气工程师、电子信息工程、自动化、计算机科学与技术、土木工程等。在就业前景上，以计算机科学与技术为例，主要职业去向包括软件工程师、前端开发、销售代表、</span><span>IT技术支持/维护工程师、软件测试等。</span></p></div></div><div class="content-item"><h4 class="content-item-title">管理学</h4> <div class="content-item-des"><p><span>管理学以人类社会各种管理活动为研究对象，是与自然科学、社会科学和人文学科综合交叉的、以问题解决为导向的应用学科。下设专业包括工商管理、市场营销、会计学、农林经济管理、公共事业管理、图书馆学、电子商务等。在就业前景上，以工商管理为例，可从事的职业包括人力资源专员、销售代表、会计师、银行会计</span><span>/柜员、行政、财务等。</span></p></div></div><div class="content-item"><h4 class="content-item-title">理学</h4> <div class="content-item-des"><p><span>理学指研究自然以及社会基本发展规律，提供自然以及人类生存与发展基本知识的学科，是</span><span>“应用学科”的“源”或“根基”。下设专业包括数学与应用数学、物理学、化学、天文学、地质学、生物科学、心理学等。在就业前景上，以物理学为例，主要就业方向为国防部门、科研机构、高校，以及以物理为基础的学科领域，如信息、能源、航天、军工、经济等。</span></p></div></div></div></div></div></div> <div class="qjjh-cp-doc-line"></div> <div class="qjjh-cp-doc-part"><h3 id="cp-4" class="part-title"><span class="part-title-num">04</span>专业倾向</h3> <div class="part-des">
+                    以下专业排序规则依据兴趣、人格、学科倾向三个维度综合计算后得出。分值越高，排序越靠前，说明你越倾向于此专业，同等指数专业代表倾向程度一致。你也可以将相关专业作为参考。
+                </div> <div class="part-zyqx"><h4 class="part-zyqx-title">本科专业倾向清单</h4> <div class="part-zyqx-line"></div> <div class="part-zyqx-warp"><table class="part-zyqx-table"><thead><tr><th width="300">专业名称</th> <th width="300">倾向指数</th> <th>相关专业</th></tr></thead> <tbody><tr><td><strong>机械工艺技术</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span></td> <td style="color: rgb(102, 102, 102);">农林智能装备工程、应急装备技术与工程、汽车维修工程教育</td></tr><tr><td><strong>森林工程</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span></td> <td style="color: rgb(102, 102, 102);">家具设计与工程、林产化工、木结构建筑与材料</td></tr><tr><td><strong>资源环境大数据工程</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span></td> <td style="color: rgb(102, 102, 102);">资源勘查工程、勘查技术与工程、地下水科学与工程</td></tr><tr><td><strong>地理空间信息工程</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span></td> <td style="color: rgb(102, 102, 102);">地理国情监测、时空信息工程、测绘工程</td></tr><tr><td><strong>物理学类</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);"></td></tr><tr><td><strong>物流管理与工程类</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);"></td></tr><tr><td><strong>航空航天类</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);"></td></tr><tr><td><strong>地球物理学</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">行星科学、防灾减灾科学与工程、空间科学与技术</td></tr><tr><td><strong>海洋资源与环境</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">海洋科学、海洋技术、军事海洋学</td></tr><tr><td><strong>飞行器控制与信息工程</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">飞行器适航技术、飞行器运维工程、飞行器质量与可靠性</td></tr><tr><td><strong>智能建造与智慧交通</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">工程软件、土木工程、道路桥梁与渡河工程</td></tr><tr><td><strong>武器发射工程</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">智能无人系统技术、特种能源技术与工程、弹药工程与爆炸技术</td></tr><tr><td><strong>农业机械化及其自动化</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">农业电气化、农业机器人、土地整治工程</td></tr><tr><td><strong>智能海洋装备</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">海洋机器人、船舶与海洋工程、海洋智能与无人技术</td></tr><tr><td><strong>船舶电子电气工程</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">交通工程、智能运输工程、交通能源融合工程</td></tr><tr><td><strong>海洋工程与技术</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">智慧海洋技术、智能海洋装备、船舶与海洋工程</td></tr><tr><td><strong>航海技术</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">邮轮工程与管理、交通运输、轮机工程</td></tr><tr><td><strong>智能采矿工程</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">稀土科学与工程、矿物资源工程、采矿工程</td></tr><tr><td><strong>铁道工程</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">工程软件、土木、水利与交通工程、城市水系统工程</td></tr><tr><td><strong>地质类</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">资源环境大数据工程、智能地球探测、旅游地学与规划工程</td></tr><tr><td><strong>漫画</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">中国画、摄影、美术学</td></tr><tr><td><strong>作曲与作曲技术理论</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">音乐表演、音乐教育、音乐科技</td></tr><tr><td><strong>雕塑</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">漫画、摄影、绘画</td></tr><tr><td><strong>录音艺术</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">数字戏剧、音乐剧、电影学</td></tr><tr><td><strong>电子与计算机工程</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">计算机科学与技术、服务科学与工程、智能科学与技术</td></tr><tr><td><strong>地质学类</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);"></td></tr><tr><td><strong>林产化工</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">木结构建筑与材料、森林工程、家具设计与工程</td></tr><tr><td><strong>海洋资源开发技术</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">海洋工程与技术、智能海洋装备、智慧海洋技术</td></tr></tbody></table></div></div> <div class="part-zyqx" style="margin-top: 40px;"><h4 class="part-zyqx-title">专科专业倾向清单</h4> <div class="part-zyqx-line"></div> <div class="part-zyqx-warp"><table class="part-zyqx-table"><thead><tr><th width="300">专业名称</th> <th width="300">倾向指数</th> <th>相关专业</th></tr></thead> <tbody><tr><td><strong>玉器设计与工艺</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span></td> <td style="color: rgb(102, 102, 102);">室内艺术设计、美容美体艺术、雕刻艺术设计</td></tr><tr><td><strong>服装陈列与展示设计</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span></td> <td style="color: rgb(102, 102, 102);">皮具艺术设计、书画艺术、眼镜造型设计与工艺</td></tr><tr><td><strong>戏剧影视表演</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span></td> <td style="color: rgb(102, 102, 102);">钢琴伴奏、音乐制作、现代流行音乐</td></tr><tr><td><strong>足球运动与管理</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">休闲体育、运动训练、运动防护</td></tr><tr><td><strong>体能训练</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">运动训练、冰雪设施运维与管理、体育运营与管理</td></tr><tr><td><strong>民族美术</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">民族表演艺术、民族传统技艺、民族服装与饰品</td></tr><tr><td><strong>游戏艺术设计</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">产品艺术设计、环境艺术设计、服装陈列与展示设计</td></tr><tr><td><strong>文物修复与保护</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">文化创意与策划、图书档案管理、文物数字技术</td></tr><tr><td><strong>影视编导</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">影视动画、全媒体广告策划与营销、影视制片管理</td></tr><tr><td><strong>影视动画</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">影视照明技术与艺术、融媒体技术与运营、音像技术</td></tr><tr><td><strong>影视多媒体技术</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">影视编导、新闻采编与制作、影视动画</td></tr><tr><td><strong>现代流行音乐</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">音乐制作、作曲技术、舞蹈编导</td></tr><tr><td><strong>动漫设计</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">人物形象设计、刺绣设计与工艺、室内艺术设计</td></tr><tr><td><strong>时尚表演与传播</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">戏曲音乐、舞台艺术设计与制作、戏曲表演</td></tr><tr><td><strong>摄影与摄像艺术</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">广告艺术设计、首饰设计与工艺、展示艺术设计</td></tr><tr><td><strong>雕刻艺术设计</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">室内艺术设计、摄影与摄像艺术、数字媒体艺术设计</td></tr><tr><td><strong>航空发动机装配调试技术</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">航天装备精密制造技术、飞行器数字化装配技术、航空发动机制造技术</td></tr><tr><td><strong>水路运输安全管理</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">集装箱运输管理、港口机械与智能控制、船舶电子电气技术</td></tr><tr><td><strong>高尔夫球运动与管理</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">运动防护、社会体育、运动训练</td></tr><tr><td><strong>民航通信技术</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">定翼机驾驶技术、飞机结构修理、民航安全技术管理</td></tr><tr><td><strong>城市轨道交通供配电技术</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">城市轨道交通机电技术、城市轨道交通工程技术、城市轨道车辆应用技术</td></tr><tr><td><strong>休闲体育</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">高尔夫球运动与管理、体育艺术表演、体育保健与康复</td></tr><tr><td><strong>公共卫生管理</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">卫生信息管理、预防医学、健康大数据管理与服务</td></tr><tr><td><strong>刑事执行</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">社区矫正、民事执行、专门矫治教育</td></tr><tr><td><strong>材料成型及控制技术</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span><span class="qxzs"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">机械设计与制造、工业材料表面处理技术、机械装备制造技术</td></tr><tr><td><strong>工业过程自动化技术</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span><span class="qxzs"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">机电一体化技术、工业互联网应用、计量测试与应用技术</td></tr><tr><td><strong>岩土工程技术</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span><span class="qxzs"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">地球物理勘探技术、工程地质勘查、环境地质工程</td></tr><tr><td><strong>工业产品质量检测技术</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span><span class="qxzs"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">机械装备制造技术、增材制造技术、数字化设计与制造技术</td></tr><tr><td><strong>热能动力工程技术</strong></td> <td><span class="qxzs qxzs-checked"></span><span class="qxzs qxzs-checked"></span><span class="qxzs"></span><span class="qxzs"></span><span class="qxzs"></span></td> <td style="color: rgb(102, 102, 102);">核电站动力设备运行与维护、热工自动化技术、电厂化学与环保技术</td></tr></tbody></table></div></div></div> <div class="qjjh-cp-doc-line"></div> <div class="qjjh-pj-title">你对本次测评结果还满意吗？</div> <div class="qjjh-pj-item"><div class="qjjh-pj-item-title">1、测评结果与你个人情况符合程度：</div> <div class="qjjh-pj-item-content"><div class="ivu-rate"><input type="hidden" value="0"> <div class="ivu-rate-star ivu-rate-star-zero"><span type="half" class="ivu-rate-star-content"></span></div><div class="ivu-rate-star ivu-rate-star-zero"><span type="half" class="ivu-rate-star-content"></span></div><div class="ivu-rate-star ivu-rate-star-zero"><span type="half" class="ivu-rate-star-content"></span></div><div class="ivu-rate-star ivu-rate-star-zero"><span type="half" class="ivu-rate-star-content"></span></div><div class="ivu-rate-star ivu-rate-star-zero"><span type="half" class="ivu-rate-star-content"></span></div> <!----></div></div></div> <div class="qjjh-pj-item"><div class="qjjh-pj-item-title">2、测评结果对你是否有启发：</div> <div class="qjjh-pj-item-content"><div name="ivuRadioGroup_1782468960592_0" class="ivu-radio-group ivu-radio-group-default ivu-radio-default"><label class="ivu-radio-wrapper ivu-radio-group-item ivu-radio-default"><span class="ivu-radio"><span class="ivu-radio-inner"></span> <input type="radio" class="ivu-radio-input" name="ivuRadioGroup_1782468960592_0"></span>是</label> <label class="ivu-radio-wrapper ivu-radio-group-item ivu-radio-default"><span class="ivu-radio"><span class="ivu-radio-inner"></span> <input type="radio" class="ivu-radio-input" name="ivuRadioGroup_1782468960592_0"></span>否</label></div></div></div> <div class="text-center"><button disabled="disabled" type="button" class="ivu-btn ivu-btn-primary" style="width: 100px;"><!----> <!----> <span>提交</span></button></div> <div class="qjjh-cp-doc-line"></div> <div class="qjjh-cp-doc-mz"><div class="qjjh-cp-mz-title">
+                    测评报告免责条款
+                </div> <div class="qjjh-cp-mz-content">
+                    以下说明与上述报告内容一起构成本测评报告统一整体，不可分割：<br>
+                    1. 上述报告内容仅表示参与测评者在兴趣、人格特质和学科倾向等题目作答上的数据结果，并无其他含义。<br>
+                    2. 因本测评报告内容可能引发的与任何第三人之纠纷或冲突，均由参与测评者本人承担，本测评提供方不承担任何法律责任。本测评提供方亦不在此类纠纷或冲突中充当证人、调停人或其他形式之参与人。<br>
+                    3. 本测评报告不得用于非法目的，本测评提供方不承担任何由此而发生或可能发生之法律责任。<br>
+                    当本测评报告打印、持有、展示或以其他任何形式使用时，即表明本测评报告之持有人或接触人已审读、理解并同意以上各条款之规定。
+                </div></div> <a href="https://gaokao.chsi.com.cn/zyck/zy/zycp/" target="_blank" class="zycp-img"><img src="/jcxkzs/cp/assets/images/zycp-2026.jpg" alt=""></a></div></div></div></div>
+
+
+
+
+<div class="qjjh-cp-footer">
+    <div class="width-1180">
+        Copyright © 2003-2026 <a href="http://www.chsi.com.cn/" target="_blank">学信网</a> All Rights Reserved&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.chsi.com.cn/about/copyright.shtml" target="_blank">版权声明</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.chsi.com.cn/about/contact.shtml" target="_blank">联系我们</a>
+    </div>
+</div>
+        <script src="https://t1.chei.com.cn/common/ch/browser/not-ie.min.js"></script>
+        <script src="https://t1.chei.com.cn/common/js/vue/2.6.10/vue.min.js"></script>
+        <script src="https://t1.chei.com.cn/common/js/api-1.0.2.js"></script>
+        <script src="https://t1.chei.com.cn/common/vue-plugins/iview4.7.0/js/iview.min.js"></script>
+        <script src="https://t2.chei.com.cn/bm/jcxkzs/cp/assets/js/g6/manifest.js"></script>
+        <script src="https://t1.chei.com.cn/bm/jcxkzs/cp/assets/js/g6/vendor.js"></script>
+        <script src="https://t2.chei.com.cn/bm/jcxkzs/cp/assets/js/g6/app.js"></script>
+        <script src="https://t4.chei.com.cn/bm/jcxkzs/cp/assets/js/g2.min.js"></script>
+        <script type="text/javascript">
+            api.axiosConfig = {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest', //普通form 表单提交方式
+                    'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+                } // 其他为axios的配置-设置headers
+            };
+            new Vue({
+                el: '#app',
+                mixins: typeof mixin != 'undefined' ? [mixin] : {},
+                methods: {
+                    logoutFn: function(href) {
+                        this.$Modal.confirm({
+                            title: '提示',
+                            content: '确定要退出吗？',
+                            onOk: function() {
+                                window.location.href = href;
+                            }
+                        });
+                    }
+                }
+            })
+        </script>
+
+</body></html>
